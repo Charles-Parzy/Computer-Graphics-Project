@@ -2,7 +2,7 @@
 #include "icg_helper.h"
 #include <glm/gtc/type_ptr.hpp>
 
-class Grid {
+class Terrain {
 
     private:
         GLuint vertex_array_id_;                // vertex array object
@@ -100,7 +100,7 @@ class Grid {
             glDeleteTextures(1, &texture_id_);
         }
 
-        void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
+        void Draw(const glm::mat4 &model = IDENTITY_MATRIX,
                   const glm::mat4 &view = IDENTITY_MATRIX,
                   const glm::mat4 &projection = IDENTITY_MATRIX) {
             glUseProgram(program_id_);
