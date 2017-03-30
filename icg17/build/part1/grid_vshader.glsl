@@ -2,6 +2,7 @@
 
 in vec2 position;
 
+
 uniform mat4 MVP;
 
 void main() {

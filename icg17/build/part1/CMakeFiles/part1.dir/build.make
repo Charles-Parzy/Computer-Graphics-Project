@@ -60,15 +60,15 @@ include part1/CMakeFiles/part1.dir/flags.make
 part1/CMakeFiles/part1.dir/main.cpp.o: part1/CMakeFiles/part1.dir/flags.make
 part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object part1/CMakeFiles/part1.dir/main.cpp.o"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/part1.dir/main.cpp.o -c /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
+	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/part1.dir/main.cpp.o -c /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
 
 part1/CMakeFiles/part1.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/part1.dir/main.cpp.i"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp > CMakeFiles/part1.dir/main.cpp.i
+	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp > CMakeFiles/part1.dir/main.cpp.i
 
 part1/CMakeFiles/part1.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/part1.dir/main.cpp.s"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp -o CMakeFiles/part1.dir/main.cpp.s
+	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp -o CMakeFiles/part1.dir/main.cpp.s
 
 part1/CMakeFiles/part1.dir/main.cpp.o.requires:
 

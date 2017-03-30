@@ -9,6 +9,7 @@ class Terrain {
         GLuint vertex_buffer_object_position_;  // memory buffer for positions
         GLuint vertex_buffer_object_index_;     // memory buffer for indices
         GLuint program_id_;                     // GLSL shader program ID
+        GLuint texture_id_;                     // texture ID
         GLuint num_indices_;                    // number of vertices to render
         GLuint MVP_id_;                         // model, view, proj matrix ID
 
@@ -31,9 +32,9 @@ class Terrain {
             {
                 std::vector<GLfloat> vertices;
                 std::vector<GLuint> indices;
-                // Make a triangle grid with dimension 512x512.
+                // TODO 5: make a triangle grid with dimension 100x100.
                 // always two subsequent entries in 'vertices' form a 2D vertex position.
-                int grid_dim = 512;
+                int grid_dim = 100;
 
                 // the given code below are the vertices for a simple quad.
                 // your grid should have the same dimension as that quad, i.e.,
@@ -100,20 +101,27 @@ class Terrain {
             glDeleteTextures(1, &texture_id_);
         }
 
-        void Draw(const glm::mat4 &model = IDENTITY_MATRIX,
+        void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
                   const glm::mat4 &view = IDENTITY_MATRIX,
                   const glm::mat4 &projection = IDENTITY_MATRIX) {
             glUseProgram(program_id_);
             
             glBindVertexArray(vertex_array_id_);
 
+            // bind textures
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture_id_);
+
             // setup MVP
             glm::mat4 MVP = projection*view*model;
             glUniformMatrix4fv(MVP_id_, ONE, DONT_TRANSPOSE, glm::value_ptr(MVP));
 
             // draw
+            // TODO 5: for debugging it can be helpful to draw only the wireframe.
+            // You can do that by uncommenting the next line.
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            // TODO 5: depending on how you set up your vertex index buffer, you
             // might have to change GL_TRIANGLE_STRIP to GL_TRIANGLES.
-            // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);
 
             glBindVertexArray(0);
