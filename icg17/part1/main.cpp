@@ -57,16 +57,18 @@ void Init(GLFWwindow* window) {
     glfwGetFramebufferSize(window, &window_width, &window_height);
     GLuint framebuffer_texture_id = framebuffer.Init(window_width, window_height);
     screenquad.Init(window_width, window_height, framebuffer_texture_id);
-}
 
-// gets called for every frame.
-void Display() {
+    //Generation of the height map.
     framebuffer.Bind();
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         screenquad.Draw();
     }
     framebuffer.Unbind();
+}
+
+// gets called for every frame.
+void Display() {
     
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
