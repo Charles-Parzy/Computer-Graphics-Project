@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="icg17-private"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="clang"/>
+		<Option virtualFolders="CMake Files\;CMake Files\common\;CMake Files\part1\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="common_headers">
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 common_headers"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="part1">
+				<Option output="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/part1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add option="-DGLEW_STATIC"/>
+					<Add option="-DGLM_FORCE_RADIANS"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/external"/>
+					<Add directory="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/8.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 part1"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="part1/fast">
+				<Option output="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/part1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add option="-DGLEW_STATIC"/>
+					<Add option="-DGLM_FORCE_RADIANS"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/external"/>
+					<Add directory="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/8.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 part1/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="copy_shaders_part1">
+				<Option working_dir="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 copy_shaders_part1"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/check_error_gl.h">
+			<Option target="common_headers"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/icg_helper.h">
+			<Option target="common_headers"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/stb_image.h">
+			<Option target="common_headers"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/tiny_obj_loader.h">
+			<Option target="common_headers"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/frambuffer/framebuffer.h">
+			<Option target="part1"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp">
+			<Option target="part1"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/screenquad/screenquad.h">
+			<Option target="part1"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain.h">
+			<Option target="part1"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain_fshader.glsl">
+			<Option target="part1"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain_vshader.glsl">
+			<Option target="part1"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/icg_settings.cmake">
+			<Option virtualFolder="CMake Files\common\"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/FindGLFW3.cmake">
+			<Option virtualFolder="CMake Files\common\"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/FindGLEW.cmake">
+			<Option virtualFolder="CMake Files\common\"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common/FindGLM.cmake">
+			<Option virtualFolder="CMake Files\common\"/>
+		</Unit>
+		<Unit filename="/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\part1\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
