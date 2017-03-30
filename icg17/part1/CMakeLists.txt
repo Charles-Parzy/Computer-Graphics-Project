@@ -7,7 +7,9 @@ file(GLOB_RECURSE HEADERS "*.h")
 # you build (ie, you want the shaders there)
 file(GLOB SHADERS
   terrain/terrain_vshader.glsl
-  terrain/terrain_fshader.glsl)
+  terrain/terrain_fshader.glsl
+  screenquad/screenquad_vshader.glsl
+  screenquad/screenquad_fshader.glsl)
 deploy_shaders_to_build_dir(${SHADERS})
 
 add_executable(${EXERCISENAME} ${SOURCES} ${HEADERS} ${SHADERS})

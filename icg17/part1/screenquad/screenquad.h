@@ -11,17 +11,14 @@ class ScreenQuad {
 
         float screenquad_width_;
         float screenquad_height_;
-        int horizontal_;
-        float variance_ = 2.0;
 
     public:
         void Init(float screenquad_width, float screenquad_height,
-                  GLuint texture, bool horizontal) {
+                  GLuint texture) {
 
             // set screenquad size
             this->screenquad_width_ = screenquad_width;
             this->screenquad_height_ = screenquad_height;
-            this->horizontal_ = horizontal ? 1 : 0;
 
             // compile the shaders
             program_id_ = icg_helper::LoadShaders("screenquad_vshader.glsl",
@@ -103,13 +100,6 @@ class ScreenQuad {
             this->screenquad_height_ = screenquad_height;
         }
 
-        void UpdateVariance(float increment) {
-            this->variance_ += increment;
-            if(this->variance_ < 0.5f) {
-                this-> variance_ = 0.5f;
-            }
-        }
-
         void Draw() {
             glUseProgram(program_id_);
             glBindVertexArray(vertex_array_id_);
@@ -119,10 +109,6 @@ class ScreenQuad {
                         this->screenquad_width_);
             glUniform1f(glGetUniformLocation(program_id_, "tex_height"),
                         this->screenquad_height_);
-            glUniform1i(glGetUniformLocation(program_id_, "horizontal"),
-                        this->horizontal_);
-            glUniform1f(glGetUniformLocation(program_id_, "variance"),
-                        this->variance_);
 
             // bind texture
             glActiveTexture(GL_TEXTURE0);

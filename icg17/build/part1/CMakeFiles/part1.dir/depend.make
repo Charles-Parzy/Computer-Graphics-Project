@@ -92,7 +92,9 @@ part1/CMakeFiles/part1.dir/main.cpp.o: ../external/glm/vec2.hpp
 part1/CMakeFiles/part1.dir/main.cpp.o: ../external/glm/vec3.hpp
 part1/CMakeFiles/part1.dir/main.cpp.o: ../external/glm/vec4.hpp
 part1/CMakeFiles/part1.dir/main.cpp.o: ../external/glm/vector_relational.hpp
+part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/framebuffer/framebuffer.h
 part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/main.cpp
+part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/screenquad/screenquad.h
 part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/terrain/terrain.h
 part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/trackball.h
 part1/CMakeFiles/part1.dir/main.cpp.o: /usr/local/include/GL/glew.h
