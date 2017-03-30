@@ -1,0 +1,1 @@
+/usr/bin/g++    -std=c++11 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/hw2_trackball.dir/main.cpp.o  -o hw2_trackball  -framework OpenGL /usr/local/lib/libglfw.dylib /usr/local/lib/libGLEW.dylib 
