@@ -7,14 +7,12 @@ class HeightMap {
         GLuint vertex_array_id_;        // vertex array object
         GLuint program_id_;             // GLSL shader program ID
         GLuint vertex_buffer_object_;   // memory buffer
-        GLuint texture_id_;             // texture ID
 
         float heightmap_width_;
         float heightmap_height_;
 
     public:
-        void Init(float heightmap_width, float heightmap_height,
-                  GLuint texture) {
+        void Init(float heightmap_width, float heightmap_height) {
 
             // set heightmap size
             this->heightmap_width_ = heightmap_width;
@@ -74,13 +72,6 @@ class HeightMap {
                                       ZERO_BUFFER_OFFSET);
             }
 
-            // load/Assign texture
-            this->texture_id_ = texture;
-            glBindTexture(GL_TEXTURE_2D, texture_id_);
-            GLuint tex_id = glGetUniformLocation(program_id_, "heightMap");
-            glUniform1i(tex_id, 0 /*GL_TEXTURE0*/);
-            glBindTexture(GL_TEXTURE_2D, 0);
-
             // to avoid the current object being polluted
             glBindVertexArray(0);
             glUseProgram(0);
@@ -92,7 +83,6 @@ class HeightMap {
             glDeleteBuffers(1, &vertex_buffer_object_);
             glDeleteProgram(program_id_);
             glDeleteVertexArrays(1, &vertex_array_id_);
-            glDeleteTextures(1, &texture_id_);
         }
 
         void UpdateSize(int heightmap_width, int heightmap_height) {
@@ -109,10 +99,6 @@ class HeightMap {
                         this->heightmap_width_);
             glUniform1f(glGetUniformLocation(program_id_, "tex_height"),
                         this->heightmap_height_);
-
-            // bind texture
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture_id_);
 
             // draw
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

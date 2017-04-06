@@ -2,21 +2,19 @@
 
 in vec2 uv;
 
-out float height;
+out vec3 height;
 
-// We might actually not need those 3
-uniform sampler2D heightMap;
 uniform float tex_width;
 uniform float tex_height;
 
-vec4 mod289(vec4 x)
+vec4 mod255(vec4 x)
 {
-    return x - floor(x * (1.0 / 289.0)) * 289.0;
+    return x - floor(x * (1.0 / 255.0)) * 255.0;
 }
  
 vec4 permute(vec4 x)
 {
-    return mod289(((x*34.0)+1.0)*x);
+    return mod255(((x*34.0)+1.0)*x);
 }
  
 vec4 taylorInvSqrt(vec4 r)
@@ -33,7 +31,7 @@ float cnoise(vec2 P)
 {
     vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
     vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
-    Pi = mod289(Pi); // To avoid truncation effects in permutation
+    Pi = mod255(Pi); // To avoid truncation effects in permutation
     vec4 ix = Pi.xzxz;
     vec4 iy = Pi.yyww;
     vec4 fx = Pf.xzxz;
@@ -87,7 +85,7 @@ float fbm(vec2 P, int octaves, float lacunarity, float gain)
 }
 
 void main() {
-    height = cnoise(uv);
+    height = vec3(cnoise(uv));
 }
 
 

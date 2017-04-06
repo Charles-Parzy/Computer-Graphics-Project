@@ -14,7 +14,7 @@ void main() {
     float height = texture(heightMap, uv).r;
 
     // 3D vertex position : X and Y from vertex array, Z from heightmap texture.
-    vec3 vertexPosition3DWorld = vec3(position.x, height, position.y);
+    vec3 vertexPosition3DWorld = vec3(position.x, position.y, height);
 
    	gl_Position = MVP * vec4(vertexPosition3DWorld, 1.0);
 }
