@@ -57,20 +57,19 @@ void Init(GLFWwindow* window) {
     glfwGetFramebufferSize(window, &window_width, &window_height);
     heightmap_texture_id = framebuffer.Init(window_width, window_height);
     heightmap.Init(window_width, window_height);
-
     terrain.Init(heightmap_texture_id);
+
+    framebuffer.Bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        heightmap.Draw();
+    framebuffer.Unbind();
 }
 
 // gets called for every frame.
 void Display() {
-    
+
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    framebuffer.Bind();
-        heightmap.Draw();
-    framebuffer.Unbind();
-
     terrain.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 

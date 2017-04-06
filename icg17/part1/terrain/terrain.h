@@ -92,7 +92,7 @@ class Terrain {
             glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
             GLuint heightmap_id = glGetUniformLocation(program_id_, "heightMap");
             glUniform1i(heightmap_id, 0 /*GL_TEXTURE0*/);
-            glBindTexture(GL_TEXTURE_2D, 1);
+            glBindTexture(GL_TEXTURE_2D, GL_TEXTURE0);
 
             // to avoid the current object being polluted
             glBindVertexArray(0);
