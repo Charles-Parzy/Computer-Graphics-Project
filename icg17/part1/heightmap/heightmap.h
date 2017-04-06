@@ -1,7 +1,7 @@
 #pragma once
 #include "icg_helper.h"
 
-class ScreenQuad {
+class HeightMap {
 
     private:
         GLuint vertex_array_id_;        // vertex array object
@@ -9,20 +9,20 @@ class ScreenQuad {
         GLuint vertex_buffer_object_;   // memory buffer
         GLuint texture_id_;             // texture ID
 
-        float screenquad_width_;
-        float screenquad_height_;
+        float heightmap_width_;
+        float heightmap_height_;
 
     public:
-        void Init(float screenquad_width, float screenquad_height,
+        void Init(float heightmap_width, float heightmap_height,
                   GLuint texture) {
 
-            // set screenquad size
-            this->screenquad_width_ = screenquad_width;
-            this->screenquad_height_ = screenquad_height;
+            // set heightmap size
+            this->heightmap_width_ = heightmap_width;
+            this->heightmap_height_ = heightmap_height;
 
             // compile the shaders
-            program_id_ = icg_helper::LoadShaders("screenquad_vshader.glsl",
-                                                  "screenquad_fshader.glsl");
+            program_id_ = icg_helper::LoadShaders("heightmap_vshader.glsl",
+                                                    "heightmap_fshader.glsl");
             if(!program_id_) {
                 exit(EXIT_FAILURE);
             }
@@ -77,7 +77,7 @@ class ScreenQuad {
             // load/Assign texture
             this->texture_id_ = texture;
             glBindTexture(GL_TEXTURE_2D, texture_id_);
-            GLuint tex_id = glGetUniformLocation(program_id_, "tex");
+            GLuint tex_id = glGetUniformLocation(program_id_, "heightMap");
             glUniform1i(tex_id, 0 /*GL_TEXTURE0*/);
             glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -95,9 +95,9 @@ class ScreenQuad {
             glDeleteTextures(1, &texture_id_);
         }
 
-        void UpdateSize(int screenquad_width, int screenquad_height) {
-            this->screenquad_width_ = screenquad_width;
-            this->screenquad_height_ = screenquad_height;
+        void UpdateSize(int heightmap_width, int heightmap_height) {
+            this->heightmap_width_ = heightmap_width;
+            this->heightmap_height_ = heightmap_height;
         }
 
         void Draw() {
@@ -106,9 +106,9 @@ class ScreenQuad {
 
             // window size uniforms
             glUniform1f(glGetUniformLocation(program_id_, "tex_width"),
-                        this->screenquad_width_);
+                        this->heightmap_width_);
             glUniform1f(glGetUniformLocation(program_id_, "tex_height"),
-                        this->screenquad_height_);
+                        this->heightmap_height_);
 
             // bind texture
             glActiveTexture(GL_TEXTURE0);

@@ -11,11 +11,13 @@
 
 #include "trackball.h"
 #include "framebuffer/framebuffer.h"
-#include "screenquad/screenquad.h"
+#include "heightmap/heightmap.h"
 
 Terrain terrain;
 FrameBuffer framebuffer;
-ScreenQuad screenquad;
+HeightMap heightmap;
+
+GLuint heightmap_texture_id;
 
 using namespace glm;
 
@@ -37,8 +39,6 @@ void Init(GLFWwindow* window) {
     // enable depth test.
     glEnable(GL_DEPTH_TEST);
     
-    terrain.Init();
-
     // setup view and projection matrices
     vec3 cam_pos(2.0f, 2.0f, 2.0f);
     vec3 cam_look(0.0f, 0.0f, 0.0f);
@@ -55,16 +55,10 @@ void Init(GLFWwindow* window) {
     // this unsures that the framebuffer has the same size as the window
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
-    GLuint framebuffer_texture_id = framebuffer.Init(window_width, window_height);
-    screenquad.Init(window_width, window_height, framebuffer_texture_id);
+    heightmap_texture_id = framebuffer.Init(window_width, window_height);
+    heightmap.Init(window_width, window_height, heightmap_texture_id);
 
-    //Generation of the height map.
-    framebuffer.Bind();
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        screenquad.Draw();
-    }
-    framebuffer.Unbind();
+    terrain.Init(heightmap_texture_id);
 }
 
 // gets called for every frame.
@@ -73,8 +67,9 @@ void Display() {
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // draw a quad on the ground.
-    terrain.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    heightmap.Draw();
+
+    //terrain.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
 // transforms glfw screen coordinates into normalized OpenGL coordinates.
@@ -136,11 +131,9 @@ void ResizeCallback(GLFWwindow* window, int width, int height) {
     
     glViewport(0, 0, window_width, window_height);
     
-    // when the window is resized, the framebuffer and the screenquad
-    // should also be resized
     framebuffer.Cleanup();
     framebuffer.Init(window_width, window_height);
-    screenquad.UpdateSize(window_width, window_height);
+    heightmap.UpdateSize(window_width, window_height);
 }
 
 void ErrorCallback(int error, const char* description) {
@@ -216,7 +209,7 @@ int main(int argc, char *argv[]) {
 
     terrain.Cleanup();
     framebuffer.Cleanup();
-    screenquad.Cleanup();
+    heightmap.Cleanup();
 
     // close OpenGL window and terminate GLFW
     glfwDestroyWindow(window);

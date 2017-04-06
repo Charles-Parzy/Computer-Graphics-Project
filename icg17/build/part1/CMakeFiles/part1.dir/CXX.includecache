@@ -816,6 +816,10 @@ detail/func_vector_relational.hpp
 icg_helper.h
 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/icg_helper.h
 
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
+icg_helper.h
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/icg_helper.h
+
 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
 GL/glew.h
 -
@@ -831,12 +835,8 @@ trackball.h
 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/trackball.h
 framebuffer/framebuffer.h
 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
-screenquad/screenquad.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/screenquad/screenquad.h
-
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/screenquad/screenquad.h
-icg_helper.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/screenquad/icg_helper.h
+heightmap/heightmap.h
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
 
 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
 icg_helper.h

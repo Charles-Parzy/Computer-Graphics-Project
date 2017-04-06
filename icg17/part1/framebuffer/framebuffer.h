@@ -43,7 +43,7 @@ class FrameBuffer {
                 }
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width_, height_, 0,
-                             GL_RED, GL_UNSIGNED_BYTE, NULL);
+                             GL_RED, GL_FLOAT, NULL);
                 // how to load from buffer
             }
 

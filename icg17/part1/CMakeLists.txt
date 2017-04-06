@@ -8,8 +8,8 @@ file(GLOB_RECURSE HEADERS "*.h")
 file(GLOB SHADERS
   terrain/terrain_vshader.glsl
   terrain/terrain_fshader.glsl
-  screenquad/screenquad_vshader.glsl
-  screenquad/screenquad_fshader.glsl)
+  heightmap/heightmap_vshader.glsl
+  heightmap/heightmap_fshader.glsl)
 deploy_shaders_to_build_dir(${SHADERS})
 
 add_executable(${EXERCISENAME} ${SOURCES} ${HEADERS} ${SHADERS})

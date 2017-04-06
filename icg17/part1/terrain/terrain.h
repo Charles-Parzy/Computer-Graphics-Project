@@ -10,11 +10,12 @@ class Terrain {
         GLuint vertex_buffer_object_index_;     // memory buffer for indices
         GLuint program_id_;                     // GLSL shader program ID
         GLuint texture_id_;                     // texture ID
+        GLuint heightmap_texture_id_;           // Heightmap texture
         GLuint num_indices_;                    // number of vertices to render
         GLuint MVP_id_;                         // model, view, proj matrix ID
 
     public:
-        void Init() {
+        void Init(GLuint heightMap) {
             // compile the shaders.
             program_id_ = icg_helper::LoadShaders("terrain_vshader.glsl",
                                                   "terrain_fshader.glsl");
@@ -86,6 +87,13 @@ class Terrain {
             // other uniforms
             MVP_id_ = glGetUniformLocation(program_id_, "MVP");
 
+            // load/Assign heightmap texture
+            this->heightmap_texture_id_ = heightMap;
+            glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
+            GLuint heightmap_id = glGetUniformLocation(program_id_, "heightMap");
+            glUniform1i(heightmap_id, 0 /*GL_TEXTURE0*/);
+            glBindTexture(GL_TEXTURE_2D, 0);
+
             // to avoid the current object being polluted
             glBindVertexArray(0);
             glUseProgram(0);
@@ -99,6 +107,7 @@ class Terrain {
             glDeleteVertexArrays(1, &vertex_array_id_);
             glDeleteProgram(program_id_);
             glDeleteTextures(1, &texture_id_);
+            glDeleteTextures(1, &heightmap_texture_id_);
         }
 
         void Draw(const glm::mat4 &model = IDENTITY_MATRIX,
@@ -119,7 +128,7 @@ class Terrain {
             // draw
             // TODO 5: for debugging it can be helpful to draw only the wireframe.
             // You can do that by uncommenting the next line.
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             // TODO 5: depending on how you set up your vertex index buffer, you
             // might have to change GL_TRIANGLE_STRIP to GL_TRIANGLES.
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);

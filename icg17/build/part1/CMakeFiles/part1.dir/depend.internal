@@ -94,8 +94,8 @@ part1/CMakeFiles/part1.dir/main.cpp.o
  ../external/glm/vec4.hpp
  ../external/glm/vector_relational.hpp
  /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
+ /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
  /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
- /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/screenquad/screenquad.h
  /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
  /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/trackball.h
  /usr/local/include/GL/glew.h
