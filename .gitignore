@@ -92,3 +92,6 @@ Temporary Items
 *.autosave
 
 # End of https://www.gitignore.io/api/c++,macos,qtcreator
+
+# build file
+**/build/*
