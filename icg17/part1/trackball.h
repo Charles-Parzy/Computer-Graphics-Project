@@ -48,7 +48,7 @@ private:
       // TODO 2: Implement this function. Read above link for details.
       GLfloat squaredNorm = p.x * p.x + p.y * p.y;
 
-      if (squaredNorm <= radius_ * radius_) {
+      if (squaredNorm <= radius_ * radius_ / 2.0f) {
         p.z = sqrt(radius_ * radius_ - squaredNorm);
       } else {
         p.z = ((radius_ * radius_) / 2.0f)/sqrt(squaredNorm);
