@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp" "/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/part1.dir/main.cpp.o"
+  "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/main.cpp" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/part1.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "Clang")
 

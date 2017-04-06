@@ -43,10 +43,10 @@ RM = /usr/local/Cellar/cmake/3.7.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17
+CMAKE_SOURCE_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build
+CMAKE_BINARY_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build"
 
 # Utility rule file for copy_shaders_part1.
 
@@ -54,14 +54,14 @@ CMAKE_BINARY_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build
 include part1/CMakeFiles/copy_shaders_part1.dir/progress.make
 
 copy_shaders_part1: part1/CMakeFiles/copy_shaders_part1.dir/build.make
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain_vshader.glsl to build folder"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain_vshader.glsl /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain_fshader.glsl to build folder"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain_fshader.glsl /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_vshader.glsl to build folder"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_vshader.glsl /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_fshader.glsl to build folder"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_fshader.glsl /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain_vshader.glsl to build folder"
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain_vshader.glsl /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/build/part1
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain_fshader.glsl to build folder"
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain_fshader.glsl /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/build/part1
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_vshader.glsl to build folder"
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_vshader.glsl /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/build/part1
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_fshader.glsl to build folder"
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /usr/local/Cellar/cmake/3.7.2/bin/cmake -E copy /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap_fshader.glsl /Users/vloyko/Desktop/Intro\ to\ Computer\ Graphics/project/Computer-Graphics-Project/icg17/build/part1
 .PHONY : copy_shaders_part1
 
 # Rule to build all files generated by this target.
@@ -70,10 +70,10 @@ part1/CMakeFiles/copy_shaders_part1.dir/build: copy_shaders_part1
 .PHONY : part1/CMakeFiles/copy_shaders_part1.dir/build
 
 part1/CMakeFiles/copy_shaders_part1.dir/clean:
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && $(CMAKE_COMMAND) -P CMakeFiles/copy_shaders_part1.dir/cmake_clean.cmake
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && $(CMAKE_COMMAND) -P CMakeFiles/copy_shaders_part1.dir/cmake_clean.cmake
 .PHONY : part1/CMakeFiles/copy_shaders_part1.dir/clean
 
 part1/CMakeFiles/copy_shaders_part1.dir/depend:
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Mikael/Documents/Computer-Graphics-Project/icg17 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/copy_shaders_part1.dir/DependInfo.cmake --color=$(COLOR)
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/copy_shaders_part1.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : part1/CMakeFiles/copy_shaders_part1.dir/depend
 

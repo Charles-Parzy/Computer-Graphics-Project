@@ -27,14 +27,14 @@ mat4 trackball_matrix;
 mat4 old_trackball_matrix;
 mat4 quad_model_matrix;
 
-int window_width = 800;
-int window_height = 600;
+int window_width = 1200;
+int window_height = 800;
 
 Trackball trackball;
 
 void Init(GLFWwindow* window) {
     // sets background color
-    glClearColor(0.937, 0.937, 0.937 /*gray*/, 1.0 /*solid*/);
+    glClearColor(0.937, 0.937, 0.937 /*gray*/, 0.9 /*solid*/);
     
     // enable depth test.
     glEnable(GL_DEPTH_TEST);

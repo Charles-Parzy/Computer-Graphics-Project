@@ -43,10 +43,10 @@ RM = /usr/local/Cellar/cmake/3.7.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17
+CMAKE_SOURCE_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build
+CMAKE_BINARY_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build"
 
 # Include any dependencies generated for this target.
 include part1/CMakeFiles/part1.dir/depend.make
@@ -59,16 +59,16 @@ include part1/CMakeFiles/part1.dir/flags.make
 
 part1/CMakeFiles/part1.dir/main.cpp.o: part1/CMakeFiles/part1.dir/flags.make
 part1/CMakeFiles/part1.dir/main.cpp.o: ../part1/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object part1/CMakeFiles/part1.dir/main.cpp.o"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/part1.dir/main.cpp.o -c /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object part1/CMakeFiles/part1.dir/main.cpp.o"
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/part1.dir/main.cpp.o -c "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/main.cpp"
 
 part1/CMakeFiles/part1.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/part1.dir/main.cpp.i"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp > CMakeFiles/part1.dir/main.cpp.i
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/main.cpp" > CMakeFiles/part1.dir/main.cpp.i
 
 part1/CMakeFiles/part1.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/part1.dir/main.cpp.s"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp -o CMakeFiles/part1.dir/main.cpp.s
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/main.cpp" -o CMakeFiles/part1.dir/main.cpp.s
 
 part1/CMakeFiles/part1.dir/main.cpp.o.requires:
 
@@ -93,8 +93,8 @@ part1/part1: part1/CMakeFiles/part1.dir/build.make
 part1/part1: /usr/local/lib/libglfw.dylib
 part1/part1: /usr/local/lib/libGLEW.dylib
 part1/part1: part1/CMakeFiles/part1.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable part1"
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/part1.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable part1"
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/part1.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 part1/CMakeFiles/part1.dir/build: part1/part1
@@ -106,10 +106,10 @@ part1/CMakeFiles/part1.dir/requires: part1/CMakeFiles/part1.dir/main.cpp.o.requi
 .PHONY : part1/CMakeFiles/part1.dir/requires
 
 part1/CMakeFiles/part1.dir/clean:
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 && $(CMAKE_COMMAND) -P CMakeFiles/part1.dir/cmake_clean.cmake
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" && $(CMAKE_COMMAND) -P CMakeFiles/part1.dir/cmake_clean.cmake
 .PHONY : part1/CMakeFiles/part1.dir/clean
 
 part1/CMakeFiles/part1.dir/depend:
-	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Mikael/Documents/Computer-Graphics-Project/icg17 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/part1.dir/DependInfo.cmake --color=$(COLOR)
+	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/part1.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : part1/CMakeFiles/part1.dir/depend
 

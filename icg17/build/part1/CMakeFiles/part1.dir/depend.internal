@@ -93,10 +93,10 @@ part1/CMakeFiles/part1.dir/main.cpp.o
  ../external/glm/vec3.hpp
  ../external/glm/vec4.hpp
  ../external/glm/vector_relational.hpp
- /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
- /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
- /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
- /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
- /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/trackball.h
+ /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
+ /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
+ /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/main.cpp
+ /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
+ /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/trackball.h
  /usr/local/include/GL/glew.h
  /usr/local/include/GLFW/glfw3.h

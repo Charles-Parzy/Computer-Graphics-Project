@@ -1,4 +1,4 @@
-# Install script for directory: /Users/Mikael/Documents/Computer-Graphics-Project/icg17
+# Install script for directory: /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,7 +29,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/cmake_install.cmake")
+  include("/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/cmake_install.cmake")
 
 endif()
 
@@ -41,5 +41,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

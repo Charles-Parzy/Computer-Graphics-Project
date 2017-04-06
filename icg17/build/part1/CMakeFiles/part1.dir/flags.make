@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++11
 
 CXX_DEFINES = -DGLEW_STATIC -DGLM_FORCE_RADIANS
 
-CXX_INCLUDES = -I/usr/local/include -I/Users/Mikael/Documents/Computer-Graphics-Project/icg17/external -I/Users/Mikael/Documents/Computer-Graphics-Project/icg17/common 
+CXX_INCLUDES = -I/usr/local/include -I"/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/external" -I"/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/common" 
 

@@ -812,41 +812,41 @@ detail/type_vec4.hpp
 detail/func_vector_relational.hpp
 ../external/glm/detail/func_vector_relational.hpp
 
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
 icg_helper.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/icg_helper.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/framebuffer/icg_helper.h
 
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
 icg_helper.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/icg_helper.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/icg_helper.h
 
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/main.cpp
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/main.cpp
 GL/glew.h
 -
 GLFW/glfw3.h
 -
 icg_helper.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/icg_helper.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/icg_helper.h
 glm/gtc/matrix_transform.hpp
 -
 terrain/terrain.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
 trackball.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/trackball.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/trackball.h
 framebuffer/framebuffer.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/framebuffer/framebuffer.h
 heightmap/heightmap.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/heightmap/heightmap.h
 
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/terrain.h
 icg_helper.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/terrain/icg_helper.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/terrain/icg_helper.h
 glm/gtc/type_ptr.hpp
 -
 
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/trackball.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/trackball.h
 icg_helper.h
-/Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1/icg_helper.h
+/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1/icg_helper.h
 
 /usr/local/include/GL/glew.h
 stddef.h
