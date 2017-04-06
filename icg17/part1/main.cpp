@@ -27,7 +27,7 @@ mat4 trackball_matrix;
 mat4 old_trackball_matrix;
 mat4 quad_model_matrix;
 
-int window_width = 1200;
+int window_width = 800;
 int window_height = 800;
 
 Trackball trackball;

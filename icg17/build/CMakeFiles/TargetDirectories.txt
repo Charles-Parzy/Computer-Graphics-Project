@@ -1,7 +1,7 @@
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles/rebuild_cache.dir
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles/edit_cache.dir
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles/common_headers.dir
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/rebuild_cache.dir
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/edit_cache.dir
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/part1.dir
-/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/copy_shaders_part1.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles/rebuild_cache.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles/edit_cache.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles/common_headers.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/rebuild_cache.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/edit_cache.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/part1.dir
+/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/part1/CMakeFiles/copy_shaders_part1.dir

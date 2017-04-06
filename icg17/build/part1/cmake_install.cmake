@@ -1,4 +1,4 @@
-# Install script for directory: /Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/part1
+# Install script for directory: /Users/Mikael/Documents/Computer-Graphics-Project/icg17/part1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

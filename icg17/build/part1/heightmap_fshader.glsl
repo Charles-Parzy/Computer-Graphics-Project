@@ -4,88 +4,94 @@ in vec2 uv;
 
 out vec3 height;
 
+uniform sampler1D permTex1D;
+
 uniform float tex_width;
 uniform float tex_height;
 
-vec4 mod255(vec4 x)
-{
-    return x - floor(x * (1.0 / 255.0)) * 255.0;
-}
- 
-vec4 permute(vec4 x)
-{
-    return mod255(((x*34.0)+1.0)*x);
-}
- 
-vec4 taylorInvSqrt(vec4 r)
-{
-    return 1.79284291400159 - 0.85373472095314 * r;
-}
- 
-vec2 fade(vec2 t) {
-    return t*t*t*(t*(t*6.0-15.0)+10.0);
-}
- 
-// Classic Perlin noise
-float cnoise(vec2 P)
-{
-    vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
-    vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
-    Pi = mod255(Pi); // To avoid truncation effects in permutation
-    vec4 ix = Pi.xzxz;
-    vec4 iy = Pi.yyww;
-    vec4 fx = Pf.xzxz;
-    vec4 fy = Pf.yyww;
-     
-    vec4 i = permute(permute(ix) + iy);
-     
-    vec4 gx = fract(i * (1.0 / 41.0)) * 2.0 - 1.0 ;
-    vec4 gy = abs(gx) - 0.5 ;
-    vec4 tx = floor(gx + 0.5);
-    gx = gx - tx;
-     
-    vec2 g00 = vec2(gx.x,gy.x);
-    vec2 g10 = vec2(gx.y,gy.y);
-    vec2 g01 = vec2(gx.z,gy.z);
-    vec2 g11 = vec2(gx.w,gy.w);
-     
-    vec4 norm = taylorInvSqrt(vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11)));
-    g00 *= norm.x;  
-    g01 *= norm.y;  
-    g10 *= norm.z;  
-    g11 *= norm.w;  
-     
-    float n00 = dot(g00, vec2(fx.x, fy.x));
-    float n10 = dot(g10, vec2(fx.y, fy.y));
-    float n01 = dot(g01, vec2(fx.z, fy.z));
-    float n11 = dot(g11, vec2(fx.w, fy.w));
-     
-    vec2 fade_xy = fade(Pf.xy);
-    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
-    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
-    return 2.3 * n_xy;
+// Perlin's new interpolation function (Hermite polynomial of degree 5).
+// Results in a C2 continuous noise function.
+vec2 fade_new(vec2 t) {
+    return t * t * t * ( t * (t*6-15) + 10 );
 }
 
-float fbm(vec2 P, int octaves, float lacunarity, float gain)
-{
-    float sum = 0.0;
-    float amp = 1.0;
-    vec2 pp = P;
-     
-    int i;
-     
-    for(i = 0; i < octaves; i+=1)
-    {
-        amp *= gain; 
-        sum += amp * cnoise(pp);
-        pp *= lacunarity;
+// Look-up in the permutation table at index idx [0,255].
+int perm(int idx) {
+    int idx_mod = int(mod(idx, 255));
+    return int(texture(permTex1D, idx_mod/255.0, 0).r);
+}
+
+// Look-up in the gradient vectors table at index idx [0,3].
+float grad(int idx, vec2 position) {
+    int idx_mod = int(mod(idx, 8)); // With    zeros in gradients.
+    vec2 gradients[] = vec2[](
+            vec2(1.0f,  1.0f),
+            vec2(-1.0f,  1.0f),
+            vec2(1.0f, -1.0f),
+            vec2(-1.0f, -1.0f),
+            vec2(0.0f,  1.0f),
+            vec2(0.0f, -1.0f),
+            vec2(1.0f,  0.0f),
+            vec2(-1.0f,  0.0f)
+    );
+    
+    return dot(gradients[idx_mod], position);
+}
+
+// Linear interpolation.
+float lerp(in float a, in float b, in float t) {
+    return a + t*(b-a);
+}
+
+// Perlin noise function.
+float perlin_noise(vec2 position) {
+
+    // Find which square contains the pixel.
+    ivec2 square = ivec2(floor(position));
+
+    // Find relative position (displacement) in this square [0,1].
+    vec2 disp = position - vec2(square);
+
+    // Generate a pseudo-random value for current square using an hash function.
+    int rnd = perm( perm(square.x) + square.y );
+
+    // Noise at current position.
+    float noise = grad(rnd, disp.xy);
+
+    // Noise at the 3 neightboring positions.
+    rnd = perm( perm(square.x+1) + square.y+0 );
+    float noise_x  = grad(rnd, disp.xy -vec2(1,0));
+    rnd = perm( perm(square.x+0) + square.y+1 );
+    float noise_y  = grad(rnd, disp.xy -vec2(0,1));
+    rnd = perm( perm(square.x+1) + square.y+1 );
+    float noise_xy = grad(rnd, disp.xy -vec2(1,1));
+
+    // Fade curve.
+    vec2 f = fade_new(disp.xy);
+
+    // Average over the four neighbor pixels.
+    float avg1 = lerp(noise,   noise_x,  f.x);
+    float avg2 = lerp(noise_y, noise_xy, f.x);
+    return lerp(avg1, avg2, f.y);
+}
+
+
+// Fractal Brownian motion : sum_k l^(-k*H) * f(l^k * x).
+float fBm(vec2 position, float H, float lacunarity, int octaves) {
+
+    float height = 0.0f;
+
+    // Loop will be unrolled by the compiler (GPU driver).
+    for (int k=0; k<octaves; k++) {
+        height   += (perlin_noise(position) * pow(lacunarity, -H*k));
+        position *= lacunarity;
     }
-    return sum;
- 
+    return height;
 }
 
 void main() {
-    height = vec3(cnoise(uv));
+   height = vec3(perlin_noise(uv*10));
+   //height = vec3(grad(3, vec2(0.5f, 0.f)));
 }
 
 

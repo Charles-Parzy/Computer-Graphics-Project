@@ -43,10 +43,10 @@ RM = /usr/local/Cellar/cmake/3.7.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17"
+CMAKE_SOURCE_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build"
+CMAKE_BINARY_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build
 
 # Utility rule file for common_headers.
 
@@ -67,6 +67,6 @@ CMakeFiles/common_headers.dir/clean:
 .PHONY : CMakeFiles/common_headers.dir/clean
 
 CMakeFiles/common_headers.dir/depend:
-	cd "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build" "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles/common_headers.dir/DependInfo.cmake" --color=$(COLOR)
+	cd /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Mikael/Documents/Computer-Graphics-Project/icg17 /Users/Mikael/Documents/Computer-Graphics-Project/icg17 /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles/common_headers.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/common_headers.dir/depend
 

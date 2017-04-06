@@ -54,10 +54,10 @@ RM = /usr/local/Cellar/cmake/3.7.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17"
+CMAKE_SOURCE_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build"
+CMAKE_BINARY_DIR = /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/common_headers.dir
@@ -66,14 +66,14 @@ CMAKE_BINARY_DIR = "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Com
 CMakeFiles/common_headers.dir/all:
 	$(MAKE) -f CMakeFiles/common_headers.dir/build.make CMakeFiles/common_headers.dir/depend
 	$(MAKE) -f CMakeFiles/common_headers.dir/build.make CMakeFiles/common_headers.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" --progress-num= "Built target common_headers"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles --progress-num= "Built target common_headers"
 .PHONY : CMakeFiles/common_headers.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/common_headers.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/common_headers.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles 0
 .PHONY : CMakeFiles/common_headers.dir/rule
 
 # Convenience name for target.
@@ -118,7 +118,7 @@ part1/preinstall:
 part1/CMakeFiles/part1.dir/all:
 	$(MAKE) -f part1/CMakeFiles/part1.dir/build.make part1/CMakeFiles/part1.dir/depend
 	$(MAKE) -f part1/CMakeFiles/part1.dir/build.make part1/CMakeFiles/part1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" --progress-num=1,2 "Built target part1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles --progress-num=1,2 "Built target part1"
 .PHONY : part1/CMakeFiles/part1.dir/all
 
 # Include target in all.
@@ -128,9 +128,9 @@ all: part1/CMakeFiles/part1.dir/all
 
 # Build rule for subdir invocation for target.
 part1/CMakeFiles/part1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 part1/CMakeFiles/part1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles 0
 .PHONY : part1/CMakeFiles/part1.dir/rule
 
 # Convenience name for target.
@@ -155,7 +155,7 @@ clean: part1/CMakeFiles/part1.dir/clean
 part1/CMakeFiles/copy_shaders_part1.dir/all:
 	$(MAKE) -f part1/CMakeFiles/copy_shaders_part1.dir/build.make part1/CMakeFiles/copy_shaders_part1.dir/depend
 	$(MAKE) -f part1/CMakeFiles/copy_shaders_part1.dir/build.make part1/CMakeFiles/copy_shaders_part1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" --progress-num= "Built target copy_shaders_part1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles --progress-num= "Built target copy_shaders_part1"
 .PHONY : part1/CMakeFiles/copy_shaders_part1.dir/all
 
 # Include target in all.
@@ -165,9 +165,9 @@ all: part1/CMakeFiles/copy_shaders_part1.dir/all
 
 # Build rule for subdir invocation for target.
 part1/CMakeFiles/copy_shaders_part1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 part1/CMakeFiles/copy_shaders_part1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vloyko/Desktop/Intro to Computer Graphics/project/Computer-Graphics-Project/icg17/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Mikael/Documents/Computer-Graphics-Project/icg17/build/CMakeFiles 0
 .PHONY : part1/CMakeFiles/copy_shaders_part1.dir/rule
 
 # Convenience name for target.
