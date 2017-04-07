@@ -27,7 +27,7 @@ mat4 trackball_matrix;
 mat4 old_trackball_matrix;
 mat4 quad_model_matrix;
 
-int window_width = 800;
+int window_width = 1200;
 int window_height = 800;
 
 Trackball trackball;
@@ -56,13 +56,14 @@ void Init(GLFWwindow* window) {
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
     heightmap_texture_id = framebuffer.Init(window_width, window_height);
-    heightmap.Init(window_width, window_height);
+    heightmap.Init();
     terrain.Init(heightmap_texture_id);
 
     framebuffer.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         heightmap.Draw();
     framebuffer.Unbind();
+
 }
 
 // gets called for every frame.
@@ -70,6 +71,7 @@ void Display() {
 
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     terrain.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
@@ -134,7 +136,10 @@ void ResizeCallback(GLFWwindow* window, int width, int height) {
     
     framebuffer.Cleanup();
     framebuffer.Init(window_width, window_height);
-    heightmap.UpdateSize(window_width, window_height);
+    framebuffer.Bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        heightmap.Draw();
+    framebuffer.Unbind();
 }
 
 void ErrorCallback(int error, const char* description) {
