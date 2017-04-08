@@ -2,17 +2,59 @@
 #include "icg_helper.h"
 #include <glm/gtc/type_ptr.hpp>
 
-class Terrain {
+struct Light {
+        glm::vec3 La = glm::vec3(1.0f, 1.0f, 1.0f);
+        glm::vec3 Ld = glm::vec3(1.0f, 1.0f, 1.0f);
+        glm::vec3 Ls = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        glm::vec3 light_pos = glm::vec3(0.0f, 0.0f, 2.0f);
+
+        // pass light properties to the shader
+        void Setup(GLuint program_id) {
+            glUseProgram(program_id);
+
+            // given in camera space
+            GLuint light_pos_id = glGetUniformLocation(program_id, "light_pos");
+
+            GLuint La_id = glGetUniformLocation(program_id, "La");
+            GLuint Ld_id = glGetUniformLocation(program_id, "Ld");
+            GLuint Ls_id = glGetUniformLocation(program_id, "Ls");
+
+            glUniform3fv(light_pos_id, ONE, glm::value_ptr(light_pos));
+            glUniform3fv(La_id, ONE, glm::value_ptr(La));
+            glUniform3fv(Ld_id, ONE, glm::value_ptr(Ld));
+            glUniform3fv(Ls_id, ONE, glm::value_ptr(Ls));
+        }
+};
+
+class Terrain : public Light {
 
     private:
         GLuint vertex_array_id_;                // vertex array object
         GLuint vertex_buffer_object_position_;  // memory buffer for positions
         GLuint vertex_buffer_object_index_;     // memory buffer for indices
         GLuint program_id_;                     // GLSL shader program ID
-        GLuint texture_id_;                     // texture ID
         GLuint heightmap_texture_id_;           // Heightmap texture
         GLuint num_indices_;                    // number of vertices to render
-        GLuint MVP_id_;                         // model, view, proj matrix ID
+
+        void BindShader(GLuint program_id, const glm::mat4 &model = IDENTITY_MATRIX,
+                  const glm::mat4 &view = IDENTITY_MATRIX,
+                  const glm::mat4 &projection = IDENTITY_MATRIX) {
+
+            Light::Setup(program_id_);
+
+            // setup matrix stack
+            GLint model_id = glGetUniformLocation(program_id_,
+                                                  "model");
+            glUniformMatrix4fv(model_id, ONE, DONT_TRANSPOSE, glm::value_ptr(model));
+            GLint view_id = glGetUniformLocation(program_id_,
+                                                 "view");
+            glUniformMatrix4fv(view_id, ONE, DONT_TRANSPOSE, glm::value_ptr(view));
+            GLint projection_id = glGetUniformLocation(program_id_,
+                                                       "projection");
+            glUniformMatrix4fv(projection_id, ONE, DONT_TRANSPOSE,
+                               glm::value_ptr(projection));
+        }
 
     public:
         void Init(GLuint heightMap) {
@@ -84,9 +126,6 @@ class Terrain {
                                       ZERO_STRIDE, ZERO_BUFFER_OFFSET);
             }
 
-            // other uniforms
-            MVP_id_ = glGetUniformLocation(program_id_, "MVP");
-
             // load/Assign heightmap texture
             this->heightmap_texture_id_ = heightMap;
             glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
@@ -106,7 +145,6 @@ class Terrain {
             glDeleteBuffers(1, &vertex_buffer_object_index_);
             glDeleteVertexArrays(1, &vertex_array_id_);
             glDeleteProgram(program_id_);
-            glDeleteTextures(1, &texture_id_);
             glDeleteTextures(1, &heightmap_texture_id_);
         }
 
@@ -114,23 +152,16 @@ class Terrain {
                   const glm::mat4 &view = IDENTITY_MATRIX,
                   const glm::mat4 &projection = IDENTITY_MATRIX) {
             glUseProgram(program_id_);
-            
             glBindVertexArray(vertex_array_id_);
 
-            // bind textures
+            //Setup up for shading
+            BindShader(program_id_, model, view, projection);
+
+            // bind Texture
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
 
-            // setup MVP
-            glm::mat4 MVP = projection*view*model;
-            glUniformMatrix4fv(MVP_id_, ONE, DONT_TRANSPOSE, glm::value_ptr(MVP));
-
-            // draw
-            // TODO 5: for debugging it can be helpful to draw only the wireframe.
-            // You can do that by uncommenting the next line.
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            // TODO 5: depending on how you set up your vertex index buffer, you
-            // might have to change GL_TRIANGLE_STRIP to GL_TRIANGLES.
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);
 
             glBindVertexArray(0);

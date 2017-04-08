@@ -101,7 +101,7 @@ float fBm(vec2 position, float H, float lacunarity, int octaves) {
 
 float hybridMultifractal(vec2 position, float H, float lacunarity, int octaves, float offset) {
     //first component
-    float frequency = 0.8f;
+    float frequency = 0.6f;
     float weight = (perlin_noise(1.5f*position)+ offset )  * pow(frequency, -H);
     float signal = 0.0f;
     float height =  weight;
