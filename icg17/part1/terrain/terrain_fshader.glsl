@@ -21,30 +21,30 @@ vec3 sandKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 GRASS values
 **************/
-vec3 grassKa = vec3(0.0f, 0.67f, 0.0f);
+vec3 grassKa = vec3(0.0f, 0.55f, 0.0f);
 vec3 grassKd = vec3(0.15f, 0.15f, 0.15f);
 vec3 grassKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 SNOW values
 **************/
-vec3 snowKa = vec3(1.0f, 0.98f, 0.98f);
-vec3 snowKd = vec3(0.0f, 0.0f, 0.0f);
+vec3 snowKa = vec3(0.85f, 0.85f, 1.0f);
+vec3 snowKd = vec3(0.2f, 0.2f, 0.2f);
 vec3 snowKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 WATER values
 **************/
-vec3 waterKa = vec3(0.25f, 0.64f, 0.88f);
-vec3 waterKd = vec3(0.1f, 0.1f, 0.1f);
-vec3 waterKs = vec3(0.2f, 0.2f, 0.2f);
+vec3 waterKa = vec3(0.2f, 0.35f, 0.8f);
+vec3 waterKd = vec3(0.2f, 0.2f, 0.2f);
+vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 HEIGHT values
 **************/
-const float sandMin = 0.000f;
-const float forestMin = 0.018f;
-const float snowMin = 0.21f;
+const float sandMin = 0.132f;
+const float forestMin = 0.14f;
+const float snowMin = 0.24f;
 
 void main() {
     vec3 x = dFdx(vpoint_mv).xyz;

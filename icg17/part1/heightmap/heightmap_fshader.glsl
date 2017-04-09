@@ -121,10 +121,34 @@ float hybridMultifractal(vec2 position, float H, float lacunarity, int octaves, 
 
 }
 
+float ridgedMultifractal(vec2 p, float H, float lacunarity, int octaves, float offset, float gain) {
+    float result, frequency, signal, weight;
+
+    frequency = 0.9f;
+
+    signal = offset - abs(perlin_noise(p));
+    signal*= signal;
+    result = signal;
+    weight = 1.0;
+
+    for(int i=1; i<octaves; ++i) {
+        p*= lacunarity;
+        weight = clamp(signal*gain, 0.0,1.0);
+        signal = offset - abs(perlin_noise(p));
+        signal*= signal*weight;
+        result+= signal * pow(frequency, -H);
+        frequency*= lacunarity;
+    }
+
+    return result;
+
+}
+
 void main() {
    //height = vec3(perlin_noise(uv*10));
-   //height = vec3(fBm(uv, 0.25, 2.3f, 4));
-   height = vec3(hybridMultifractal(uv, 0.25, 2.3f, 15, 0.7f));
+   //height = vec3(fBm(uv, 0.25f, 2.3f, 4));
+   //height = vec3(hybridMultifractal(uv, 0.25f, 2.3f, 15, 0.7f));
+   height = vec3(min(0.45, ridgedMultifractal(uv, 0.25f, 2.3f, 15, 0.695f, 2.1f)*0.2)); //small HACK since there was a really high value
 }
 
 
