@@ -21,7 +21,7 @@ vec3 sandKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 GRASS values
 **************/
-vec3 grassKa = vec3(0.0f, 0.55f, 0.0f);
+vec3 grassKa = vec3(0.0f, 0.40f, 0.0f);
 vec3 grassKd = vec3(0.15f, 0.15f, 0.15f);
 vec3 grassKs = vec3(0.0f, 0.0f, 0.0f);
 
@@ -42,16 +42,16 @@ vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER COLOR
 **************/
-vec3 water = vec3(0.0f, 0.0f, 1.0f);
+vec3 water = vec3(0.1f, 0.1f, 1.0f);
 
 /*************
 CONSTANT values
 **************/
 const float default_alpha = 1.0f;
-const float sandMin = 0.132f;
+const float sandMin = 0.130f;
 const float forestMin = 0.14f;
 const float snowMin = 0.24f;
-const float epsilon = 0.03f;
+const float epsilon = 0.02f;
 
 void main() {
 
@@ -60,7 +60,7 @@ void main() {
         if(height >= sandMin) {
             color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
         }else {
-            color = vec4(water, 0.7f);
+            color = vec4(water, 0.5f);
         }
     } else {
         vec3 x = dFdx(vpoint_mv).xyz;
@@ -74,12 +74,12 @@ void main() {
         vec3 diffuse;
         vec3 specular;
 
-        if (height >= snowMin + epsilon) {
+        if (height >= snowMin + epsilon) { // Only white wnoe
             ambiant = snowKa * La;
             diffuse = snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
         
-        } else if (height > snowMin) {
+        } else if (height > snowMin) { // Gradient white snow and grass
             float percentageGreen = ((snowMin + epsilon) - height)/epsilon;
             float percentageWhite = 1.0 - percentageGreen;
 
@@ -87,12 +87,12 @@ void main() {
             diffuse = (percentageWhite * snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageGreen*grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
             specular = (percentageWhite*snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageGreen*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);  
 
-        } else if (height >= (forestMin + epsilon) && height < snowMin) {
+        } else if (height >= (forestMin + epsilon) && height < snowMin) { // Only Grass
             ambiant = grassKa * La;
             diffuse = grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
 
-        } else if (height >= forestMin && height < (forestMin+epsilon)) {
+        } else if (height >= forestMin && height < (forestMin+epsilon)) { // Gradient grass and sand
             float percentageSand = ((forestMin + epsilon) - height)/epsilon;
             float percentageGreen = 1.0 - percentageSand;
 
@@ -100,12 +100,12 @@ void main() {
             diffuse = (percentageGreen * grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageSand*sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
             specular = (percentageGreen*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageSand*sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);  
 
-    	} else if (height >= sandMin && height < forestMin) {
+    	} else if (height >= sandMin && height < forestMin) { // Only sand
             ambiant = sandKa * La;
             diffuse = sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;
 
-        } else {
+        } else { // Only underwater
             ambiant = underKa * La;
             diffuse = underKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = underKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;  

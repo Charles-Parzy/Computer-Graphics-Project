@@ -14,7 +14,7 @@ out vec4 vpoint_mv;
 out vec3 light_dir, view_dir;
 out vec2 texture_coordinates;
 
-const float sandMin = 0.1322f; // Keep it consistant with a little bit more 
+const float sandMin = 0.131f; // Keep it consistant with a little bit more 
 
 void main() {
     // World (triangle grid) coordinates are (-1,-1) x (1,1).
