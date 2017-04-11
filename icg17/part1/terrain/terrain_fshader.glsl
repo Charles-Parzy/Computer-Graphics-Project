@@ -30,7 +30,7 @@ ROCK values
 **************/
 vec3 rockKa = vec3(0.25f, 0.24f, 0.23f);
 vec3 rockKd = vec3(0.3f, 0.3f, 0.3f);
-vec3 rockKs = vec3(0.08f, 0.08f, 0.08f);
+vec3 rockKs = vec3(0.05f, 0.05f, 0.05f);
 
 /*************
 SNOW values
@@ -49,7 +49,8 @@ vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER COLOR
 **************/
-vec3 water = vec3(0.1f, 0.1f, 1.0f);
+vec3 darkWater = vec3(0.0f, 0.0f, 0.0f);
+vec3 clearWater = vec3(0.0f, 0.30f, 1.0f);
 
 /*************
 CONSTANT values
@@ -61,14 +62,19 @@ const float snowMin = 0.26f;
 const float rockMin = 0.18f;
 const float epsilon = 0.02f;
 
-void main() {
+vec3 getWaterColor(float percentageDarkBlue) {
+    return mix(clearWater, darkWater, vec3(percentageDarkBlue));
+}
 
+void main() {
     if(isWater) {
         float height = texture(heightMap, texture_coordinates).r;
-        if(height >= sandMin) {
+        if (height >= sandMin) {
             color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
-        }else {
-            color = vec4(water, 0.5f);
+        } else {
+            height = max(0.0f, height);
+            float percentageDarkBlue = (sandMin-height)/sandMin;
+            color = vec4(getWaterColor(percentageDarkBlue), 0.5f);
         }
     } else {
         vec3 x = dFdx(vpoint_mv).xyz;
@@ -134,4 +140,5 @@ void main() {
 
         color = vec4(ambiant + diffuse + specular, 1.0f);
     }
+
 }
