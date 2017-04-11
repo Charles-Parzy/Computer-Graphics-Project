@@ -7,6 +7,11 @@ class HeightMap {
         GLuint vertex_array_id_;        // vertex array object
         GLuint program_id_;             // GLSL shader program ID
         GLuint vertex_buffer_object_;   // memory buffer
+        float H_id_ = 0.6f;
+        float lacunarity_ = 2.3f;
+        int octaves_ = 15;
+        float offset_ = 0.7f;
+        float gain_ = 2.7f;
 
     public:
         void Init() {
@@ -81,10 +86,46 @@ class HeightMap {
             glUseProgram(program_id_);
             glBindVertexArray(vertex_array_id_);
 
+            glUniform1f(glGetUniformLocation(program_id_, "H"),
+                        this->H_id_);
+            glUniform1f(glGetUniformLocation(program_id_, "Lacunarity"),
+                        this->lacunarity_);
+            glUniform1i(glGetUniformLocation(program_id_, "Octaves"),
+                        this->octaves_);
+            glUniform1f(glGetUniformLocation(program_id_, "Offset"),
+                        this->offset_);
+            glUniform1f(glGetUniformLocation(program_id_, "Gain"),
+                        this->gain_);
+
             // draw
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
             glBindVertexArray(0);
             glUseProgram(0);
+        }
+
+        void setH(float increment) {
+            H_id_ += increment;
+            cout << "Changing H" << H_id_ << endl;
+        }
+
+        void setLacunarity(float increment) {
+            lacunarity_ += increment;
+            cout << "Changing Lacunarity" << lacunarity_ << endl;
+        }  
+
+        void setOctaves(int increment) {
+            octaves_ += increment;
+            cout << "Changing Octaves" << octaves_ << endl;
+        }
+
+        void setOffset(float increment) {
+            offset_ += increment;
+            cout << "Changing Offset" << offset_ << endl;
+        }
+
+        void setGain(float increment) {
+            gain_ += increment;
+            cout << "Changing Gain" << gain_ << endl;
         }
 };

@@ -4,6 +4,13 @@ in vec2 uv;
 
 out vec3 height;
 
+uniform float Gain;
+uniform float Lacunarity;
+uniform float H;
+uniform float Offset;
+uniform int Octaves;
+
+const float heightScaleFactor = 0.2;
 const vec2 gradients[] = vec2[](
             vec2(1.0f,  1.0f),
             vec2(-1.0f,  1.0f),
@@ -148,7 +155,7 @@ void main() {
    //height = vec3(perlin_noise(uv*10));
    //height = vec3(fBm(uv, 0.25f, 2.3f, 4));
    //height = vec3(hybridMultifractal(uv, 0.25f, 2.3f, 15, 0.7f));
-   height = vec3(min(0.45, ridgedMultifractal(uv, 0.25f, 2.3f, 15, 0.695f, 2.1f)*0.2)); //small HACK since there was a really high value
+   height = vec3(ridgedMultifractal(uv, H, Lacunarity, Octaves, Offset, Gain) * heightScaleFactor);
 }
 
 

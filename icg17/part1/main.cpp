@@ -15,7 +15,9 @@
 
 Terrain terrain;
 FrameBuffer framebuffer;
-HeightMap heightmap;
+HeightMap heightmap;    
+Terrain water;
+
 
 GLuint heightmap_texture_id;
 
@@ -63,6 +65,7 @@ void Init(GLFWwindow* window) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         heightmap.Draw();
     framebuffer.Unbind();
+    water.Init();
 
 }
 
@@ -72,7 +75,13 @@ void Display() {
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    framebuffer.Bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        heightmap.Draw();
+    framebuffer.Unbind();
+
     terrain.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    water.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
 // transforms glfw screen coordinates into normalized OpenGL coordinates.
@@ -150,6 +159,45 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
+
+    // only act on release
+    if(action != GLFW_RELEASE) {
+        return;
+    }
+        switch(key) {
+            case 'Q':
+                heightmap.setH(+0.05);
+                break;
+            case 'W':
+                heightmap.setH(+-0.05);
+                break;
+            case 'E':
+                heightmap.setLacunarity(+0.05);
+                break;
+            case 'R':
+                heightmap.setLacunarity(-0.05);
+                break;
+            case 'T':
+                heightmap.setOctaves(+1);
+                break;
+            case 'Z':
+                heightmap.setOctaves(-1);
+                break;
+            case 'U':
+                heightmap.setOffset(+0.05);
+                break;
+            case 'I':
+                heightmap.setOffset(-0.05);
+                break;
+            case 'O':
+                heightmap.setGain(+0.05);
+                break;
+            case 'P':
+                heightmap.setGain(-0.05);
+                break;
+            default:
+                break;
+        }
 }
 
 

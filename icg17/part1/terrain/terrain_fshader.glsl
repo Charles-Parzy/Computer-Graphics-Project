@@ -7,7 +7,9 @@ in vec3 light_dir, view_dir;
 uniform vec3 La, Ld, Ls;
 uniform sampler2D heightMap;
 
-out vec3 color;
+uniform bool isWater;
+
+out vec4 color;
 
 float default_alpha = 1.0f;
 
@@ -35,9 +37,7 @@ vec3 snowKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER values
 **************/
-vec3 waterKa = vec3(0.2f, 0.35f, 0.8f);
-vec3 waterKd = vec3(0.2f, 0.2f, 0.2f);
-vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
+vec3 water = vec3(0.0f, 0.0f, 1.0f);
 
 /*************
 HEIGHT values
@@ -47,37 +47,44 @@ const float forestMin = 0.14f;
 const float snowMin = 0.24f;
 
 void main() {
-    vec3 x = dFdx(vpoint_mv).xyz;
-    vec3 y = dFdy(vpoint_mv).xyz;
-    vec3 normal_mv = normalize(cross(x,y));
-    vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
-	
-    float height = texture(heightMap, texture_coordinates).r;
 
-    vec3 ambiant;
-    vec3 diffuse;
-    vec3 specular;
-
-	if (height >= snowMin) {
-        ambiant = snowKa * La;
-        diffuse = snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
-        specular = snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;	
-
-    } else if (height >= forestMin && height < snowMin) {
-        ambiant = grassKa * La;
-        diffuse = grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
-        specular = grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
-
-	} else if (height > sandMin && height < forestMin) {
-        ambiant = sandKa * La;
-        diffuse = sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
-        specular = sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 	
-
+    if(isWater) {
+        float height = texture(heightMap, texture_coordinates).r;
+        if(height >= sandMin) {
+            color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
+        }else {
+            color = vec4(water, 0.5f);
+        }
     } else {
-        ambiant = waterKa * La;
-        diffuse = waterKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
-        specular = waterKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;  
-    }
+        vec3 x = dFdx(vpoint_mv).xyz;
+        vec3 y = dFdy(vpoint_mv).xyz;
+        vec3 normal_mv = normalize(cross(x,y));
+        vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
+    	
+        float height = texture(heightMap, texture_coordinates).r;
 
-    color = ambiant + diffuse + specular;
+        vec3 ambiant;
+        vec3 diffuse;
+        vec3 specular;
+
+    	if (height >= snowMin) {
+            ambiant = snowKa * La;
+            diffuse = snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
+            specular = snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;	
+
+        } else if (height >= forestMin && height < snowMin) {
+            ambiant = grassKa * La;
+            diffuse = grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
+            specular = grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
+
+    	} else {
+            ambiant = sandKa * La;
+            diffuse = sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
+            specular = sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 	
+
+        }
+
+        vec3 temp = vec3(ambiant + diffuse + specular);
+        color = vec4(temp.xyz, 1.0f);
+    }
 }

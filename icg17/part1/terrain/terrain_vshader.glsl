@@ -8,6 +8,7 @@ uniform mat4 projection;
 uniform mat4 model;
 uniform mat4 view;
 uniform vec3 light_pos;
+uniform bool isWater;
 
 out vec4 vpoint_mv;
 out vec3 light_dir, view_dir;
@@ -19,9 +20,14 @@ void main() {
     texture_coordinates = (position + vec2(1.0, 1.0)) * 0.5;
     float height = texture(heightMap, texture_coordinates).r;
 
-    // 3D vertex position : X and Y from vertex array, Z from heightmap texture.
-    vec3 vertexPosition3DWorld = vec3(position.x, height, position.y);
+    vec3 vertexPosition3DWorld;
 
+    if(isWater) {
+        vertexPosition3DWorld = vec3(position.x, 0.132f, position.y);
+    } else {
+        // 3D vertex position : X and Y from vertex array, Z from heightmap texture.
+        vertexPosition3DWorld = vec3(position.x, height, position.y);
+    }
 
     mat4 MV = view * model;
     vpoint_mv = MV * vec4(vertexPosition3DWorld, 1.0);

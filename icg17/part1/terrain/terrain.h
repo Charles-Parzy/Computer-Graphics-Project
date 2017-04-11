@@ -36,6 +36,7 @@ class Terrain : public Light {
         GLuint program_id_;                     // GLSL shader program ID
         GLuint heightmap_texture_id_;           // Heightmap texture
         GLuint num_indices_;                    // number of vertices to render
+        GLboolean isWater = false;
 
         void BindShader(GLuint program_id, const glm::mat4 &model = IDENTITY_MATRIX,
                   const glm::mat4 &view = IDENTITY_MATRIX,
@@ -54,10 +55,13 @@ class Terrain : public Light {
                                                        "projection");
             glUniformMatrix4fv(projection_id, ONE, DONT_TRANSPOSE,
                                glm::value_ptr(projection));
+
+            glUniform1i(glGetUniformLocation(program_id_, "isWater"),
+                        this->isWater);
         }
 
     public:
-        void Init(GLuint heightMap) {
+        void Init(GLuint heightMap = -1) {
             // compile the shaders.
             program_id_ = icg_helper::LoadShaders("terrain_vshader.glsl",
                                                   "terrain_fshader.glsl");
@@ -126,13 +130,18 @@ class Terrain : public Light {
                                       ZERO_STRIDE, ZERO_BUFFER_OFFSET);
             }
 
+            if(heightMap == -1) {
+                isWater = true;
+            }else{
+                isWater = false;
+            }
             // load/Assign heightmap texture
             this->heightmap_texture_id_ = heightMap;
             glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
             GLuint heightmap_id = glGetUniformLocation(program_id_, "heightMap");
             glUniform1i(heightmap_id, 0 /*GL_TEXTURE0*/);
             glBindTexture(GL_TEXTURE_2D, GL_TEXTURE0);
-
+            
             // to avoid the current object being polluted
             glBindVertexArray(0);
             glUseProgram(0);
@@ -154,6 +163,9 @@ class Terrain : public Light {
             glUseProgram(program_id_);
             glBindVertexArray(vertex_array_id_);
 
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
             //Setup up for shading
             BindShader(program_id_, model, view, projection);
 
@@ -164,6 +176,7 @@ class Terrain : public Light {
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);
 
+            glDisable(GL_BLEND);
             glBindVertexArray(0);
             glUseProgram(0);
         }
