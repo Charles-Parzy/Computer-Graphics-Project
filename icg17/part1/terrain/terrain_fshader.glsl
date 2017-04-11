@@ -26,11 +26,18 @@ vec3 grassKd = vec3(0.15f, 0.15f, 0.15f);
 vec3 grassKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
+ROCK values
+**************/
+vec3 rockKa = vec3(0.25f, 0.24f, 0.23f);
+vec3 rockKd = vec3(0.3f, 0.3f, 0.3f);
+vec3 rockKs = vec3(0.08f, 0.08f, 0.08f);
+
+/*************
 SNOW values
 **************/
 vec3 snowKa = vec3(0.85f, 0.85f, 1.0f);
 vec3 snowKd = vec3(0.2f, 0.2f, 0.2f);
-vec3 snowKs = vec3(0.0f, 0.0f, 0.0f);
+vec3 snowKs = vec3(0.5f, 0.5f, 0.5f);
 
 /*************
 UNDERGROUND values
@@ -49,8 +56,9 @@ CONSTANT values
 **************/
 const float default_alpha = 1.0f;
 const float sandMin = 0.130f;
-const float forestMin = 0.14f;
-const float snowMin = 0.24f;
+const float forestMin = 0.135f;
+const float snowMin = 0.26f;
+const float rockMin = 0.18f;
 const float epsilon = 0.02f;
 
 void main() {
@@ -74,25 +82,38 @@ void main() {
         vec3 diffuse;
         vec3 specular;
 
-        if (height >= snowMin + epsilon) { // Only white wnoe
+        if (height >= snowMin + epsilon) { // Only white snow
             ambiant = snowKa * La;
             diffuse = snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
         
-        } else if (height > snowMin) { // Gradient white snow and grass
-            float percentageGreen = ((snowMin + epsilon) - height)/epsilon;
-            float percentageWhite = 1.0 - percentageGreen;
+        } else if (height > snowMin) { // Gradient white snow and grey rock
+            float percentageGrey = ((snowMin + epsilon) - height)/epsilon;
+            float percentageWhite = 1.0 - percentageGrey;
 
-            ambiant = (percentageWhite * snowKa * La) + (percentageGreen* grassKa * La);
-            diffuse = (percentageWhite * snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageGreen*grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
-            specular = (percentageWhite*snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageGreen*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);  
+            ambiant = (percentageWhite * snowKa * La) + (percentageGrey* rockKa * La);
+            diffuse = (percentageWhite * snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageGrey*rockKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
+            specular = (percentageWhite*snowKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageGrey*rockKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);  
 
-        } else if (height >= (forestMin + epsilon) && height < snowMin) { // Only Grass
+        } else if (height > rockMin + epsilon) { // Only grey rock
+            ambiant  = rockKa * La;
+            diffuse = rockKd * (max(0.0f, dot(normal_mv, light_dir))) * Ld;
+            specular = rockKs * pow((max(0.0f, dot(r, view_dir))),default_alpha) * Ls; 
+
+        } else if (height > rockMin) { // Gradient grey rock and grass
+            float percentageGreen = ((rockMin + epsilon) - height)/epsilon;
+            float percentageGrey = 1.0 - percentageGreen;
+
+            ambiant = (percentageGrey * rockKa * La) + (percentageGreen* grassKa * La);
+            diffuse = (percentageGrey * rockKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageGreen*grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
+            specular = (percentageGrey*rockKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageGreen*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls); 
+
+        } else if (height >= forestMin + epsilon) { // Only Grass
             ambiant = grassKa * La;
             diffuse = grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
 
-        } else if (height >= forestMin && height < (forestMin+epsilon)) { // Gradient grass and sand
+        } else if (height >= forestMin) { // Gradient grass and sand
             float percentageSand = ((forestMin + epsilon) - height)/epsilon;
             float percentageGreen = 1.0 - percentageSand;
 
@@ -100,7 +121,7 @@ void main() {
             diffuse = (percentageGreen * grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageSand*sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
             specular = (percentageGreen*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageSand*sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);  
 
-    	} else if (height >= sandMin && height < forestMin) { // Only sand
+    	} else if (height >= sandMin) { // Only sand
             ambiant = sandKa * La;
             diffuse = sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;
