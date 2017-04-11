@@ -61,7 +61,7 @@ class Terrain : public Light {
         }
 
     public:
-        void Init(GLuint heightMap = -1) {
+        void Init(GLuint heightMap, GLboolean drawingWater) {
             // compile the shaders.
             program_id_ = icg_helper::LoadShaders("terrain_vshader.glsl",
                                                   "terrain_fshader.glsl");
@@ -130,7 +130,7 @@ class Terrain : public Light {
                                       ZERO_STRIDE, ZERO_BUFFER_OFFSET);
             }
 
-            if(heightMap == -1) {
+            if(drawingWater) {
                 isWater = true;
             }else{
                 isWater = false;

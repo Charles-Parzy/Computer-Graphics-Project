@@ -86,6 +86,7 @@ class HeightMap {
             glUseProgram(program_id_);
             glBindVertexArray(vertex_array_id_);
 
+            // Temporary values to allow easier changes
             glUniform1f(glGetUniformLocation(program_id_, "H"),
                         this->H_id_);
             glUniform1f(glGetUniformLocation(program_id_, "Lacunarity"),

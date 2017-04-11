@@ -59,14 +59,13 @@ void Init(GLFWwindow* window) {
     glfwGetFramebufferSize(window, &window_width, &window_height);
     heightmap_texture_id = framebuffer.Init(window_width, window_height);
     heightmap.Init();
-    terrain.Init(heightmap_texture_id);
+    terrain.Init(heightmap_texture_id, false);
+    water.Init(heightmap_texture_id, true);
 
     framebuffer.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         heightmap.Draw();
     framebuffer.Unbind();
-    water.Init();
-
 }
 
 // gets called for every frame.
