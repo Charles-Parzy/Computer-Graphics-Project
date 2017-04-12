@@ -29,8 +29,8 @@ vec3 grassKs = vec3(0.0f, 0.0f, 0.0f);
 ROCK values
 **************/
 vec3 rockKa = vec3(0.25f, 0.24f, 0.23f);
-vec3 rockKd = vec3(0.3f, 0.3f, 0.3f);
-vec3 rockKs = vec3(0.05f, 0.05f, 0.05f);
+vec3 rockKd = vec3(0.2f, 0.2f, 0.2f);
+vec3 rockKs = vec3(0.0f, 0.0f, 0.00f);
 
 /*************
 SNOW values
@@ -49,8 +49,9 @@ vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER COLOR
 **************/
-vec3 darkWater = vec3(0.0f, 0.0f, 0.0f);
-vec3 clearWater = vec3(0.0f, 0.30f, 1.0f);
+vec3 waterKa = vec3(0.0f, 0.3f, 0.9f);
+vec3 waterKd = vec3(0.0f, 0.31f, 0.31f);
+vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 CONSTANT values
@@ -63,31 +64,38 @@ const float rockMin = 0.18f;
 const float epsilon = 0.02f;
 
 vec3 getWaterColor(float percentageDarkBlue) {
-    return mix(clearWater, darkWater, vec3(percentageDarkBlue));
+    return mix(waterKa, vec3(0.0f, 0.0f, 0.0f), vec3(percentageDarkBlue));
 }
 
 void main() {
+    vec3 x = dFdx(vpoint_mv).xyz;
+    vec3 y = dFdy(vpoint_mv).xyz;        
+    vec3 normal_mv = normalize(cross(x,y));
+    vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
+        
+    float height = texture(heightMap, texture_coordinates).r;
+
+    vec3 ambiant;
+    vec3 diffuse;
+    vec3 specular;
+
     if(isWater) {
-        float height = texture(heightMap, texture_coordinates).r;
-        if (height >= sandMin) {
-            color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
-        } else {
+        ambiant = waterKa * La;
+        diffuse = waterKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
+        specular = waterKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
+
+        if(height >= sandMin && height <= sandMin + 0.005) {
+            float waterPerc = 0.7f - 0.7f * ((height - (sandMin)) / 0.005f);
+            color = vec4(ambiant + diffuse + specular, waterPerc);
+        }else if (height < sandMin){
             height = max(0.0f, height);
             float percentageDarkBlue = (sandMin-height)/sandMin;
-            color = vec4(getWaterColor(percentageDarkBlue), 0.5f);
+            ambiant = getWaterColor(percentageDarkBlue) * La;
+            color = vec4(ambiant + diffuse + specular, 0.7f);
+        } else {
+            color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
         }
-    } else {
-        vec3 x = dFdx(vpoint_mv).xyz;
-        vec3 y = dFdy(vpoint_mv).xyz;
-        vec3 normal_mv = normalize(cross(x,y));
-        vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
-    	
-        float height = texture(heightMap, texture_coordinates).r;
-
-        vec3 ambiant;
-        vec3 diffuse;
-        vec3 specular;
-
+    }  else {
         if (height >= snowMin + epsilon) { // Only white snow
             ambiant = snowKa * La;
             diffuse = snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
@@ -127,7 +135,7 @@ void main() {
             diffuse = (percentageGreen * grassKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageSand*sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
             specular = (percentageGreen*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageSand*sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);  
 
-    	} else if (height >= sandMin) { // Only sand
+        } else if (height >= sandMin) { // Only sand
             ambiant = sandKa * La;
             diffuse = sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;

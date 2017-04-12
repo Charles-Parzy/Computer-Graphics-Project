@@ -38,7 +38,8 @@ class Terrain : public Light {
         GLuint num_indices_;                    // number of vertices to render
         GLboolean isWater = false;
 
-        void BindShader(GLuint program_id, const glm::mat4 &model = IDENTITY_MATRIX,
+        void BindShader(float time, GLuint program_id,
+                        const glm::mat4 &model = IDENTITY_MATRIX,
                   const glm::mat4 &view = IDENTITY_MATRIX,
                   const glm::mat4 &projection = IDENTITY_MATRIX) {
 
@@ -58,10 +59,11 @@ class Terrain : public Light {
 
             glUniform1i(glGetUniformLocation(program_id_, "isWater"),
                         this->isWater);
+            glUniform1f(glGetUniformLocation(program_id_, "time"), time);
         }
 
     public:
-        void Init(GLuint heightMap, GLboolean drawingWater) {
+        void Init(GLuint heightMap, GLboolean isWater) {
             // compile the shaders.
             program_id_ = icg_helper::LoadShaders("terrain_vshader.glsl",
                                                   "terrain_fshader.glsl");
@@ -81,7 +83,7 @@ class Terrain : public Light {
                 std::vector<GLuint> indices;
                 // TODO 5: make a triangle grid with dimension 100x100.
                 // always two subsequent entries in 'vertices' form a 2D vertex position.
-                int grid_dim = 512;
+                int grid_dim = 800;
 
                 // the given code below are the vertices for a simple quad.
                 // your grid should have the same dimension as that quad, i.e.,
@@ -130,11 +132,8 @@ class Terrain : public Light {
                                       ZERO_STRIDE, ZERO_BUFFER_OFFSET);
             }
 
-            if(drawingWater) {
-                isWater = true;
-            }else{
-                isWater = false;
-            }
+            this->isWater = isWater;
+
             // load/Assign heightmap texture
             this->heightmap_texture_id_ = heightMap;
             glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
@@ -157,7 +156,7 @@ class Terrain : public Light {
             glDeleteTextures(1, &heightmap_texture_id_);
         }
 
-        void Draw(const glm::mat4 &model = IDENTITY_MATRIX,
+        void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
                   const glm::mat4 &view = IDENTITY_MATRIX,
                   const glm::mat4 &projection = IDENTITY_MATRIX) {
             glUseProgram(program_id_);
@@ -167,7 +166,7 @@ class Terrain : public Light {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             //Setup up for shading
-            BindShader(program_id_, model, view, projection);
+            BindShader(time, program_id_, model, view, projection);
 
             // bind Texture
             glActiveTexture(GL_TEXTURE0);

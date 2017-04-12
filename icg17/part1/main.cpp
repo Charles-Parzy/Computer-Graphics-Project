@@ -18,7 +18,6 @@ FrameBuffer framebuffer;
 HeightMap heightmap;    
 Terrain water;
 
-
 GLuint heightmap_texture_id;
 
 using namespace glm;
@@ -29,8 +28,13 @@ mat4 trackball_matrix;
 mat4 old_trackball_matrix;
 mat4 quad_model_matrix;
 
-int window_width = 800;
-int window_height = 800;
+int window_width = 1200;
+int window_height = 1000;
+
+float speed_x = 0.0f;
+float speed_y = 0.0f;
+
+float eps = 0.0005;
 
 Trackball trackball;
 
@@ -47,9 +51,9 @@ void Init(GLFWwindow* window) {
     vec3 cam_up(0.0f, 0.0f, 1.0f);
     view_matrix = lookAt(cam_pos, cam_look, cam_up);
     float ratio = window_width / (float) window_height;
-    projection_matrix = perspective(45.0f, ratio, 0.1f, 10.0f);
+    projection_matrix = perspective(45.0f, ratio, 0.1f, 5.0f);
     
-    view_matrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, -4.0f));
+    view_matrix = translate(mat4(1.0f), vec3(0.0f, -0.3f, 0.0f));
     trackball_matrix = IDENTITY_MATRIX;
     quad_model_matrix = translate(mat4(1.0f), vec3(0.0f, -0.25f, 0.0f));
     
@@ -66,16 +70,41 @@ void Init(GLFWwindow* window) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         heightmap.Draw();
     framebuffer.Unbind();
+
 }
 
 // gets called for every frame.
-void Display() {
+void Display() {    
+    const float time = glfwGetTime();
+    
+    int sign_x = speed_x / abs(speed_x);
+    int sign_y = speed_y / abs(speed_y);
+    
+    if (abs(speed_x) >= eps)
+        speed_x -= (0.00001 * sign_x);
+    
+    if (abs(speed_y) >= eps)
+        speed_y -= (0.00001 * sign_y);
+    
+    if (abs(speed_x) > 0.01)
+        speed_x = 0.01f * sign_x;
+    
+    if (abs(speed_y) > 0.01)
+        speed_y = 0.01f * sign_y;
+    
+    if (abs(speed_x) < eps)
+    speed_x = 0;
+    
+    if (abs(speed_y) < eps)
+    speed_y = 0;
+    
+    view_matrix = translate(view_matrix, vec3(speed_y, 0.0f, speed_x));
+    trackball_matrix = translate(trackball_matrix, vec3(speed_y, 0.0f, speed_x));
 
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    terrain.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
-    water.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    terrain.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    water.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
 // transforms glfw screen coordinates into normalized OpenGL coordinates.
@@ -148,9 +177,9 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     }
 
     // only act on release
-    if(action != GLFW_RELEASE) {
-        return;
-    }
+    //if(action != GLFW_RELEASE) {
+    //    return;
+    //}
         switch(key) {
             case 'Q':
                 heightmap.setH(+0.05);
@@ -181,6 +210,18 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
                 break;
             case 'P':
                 heightmap.setGain(-0.05);
+                break;
+            case GLFW_KEY_UP:
+                speed_x += 0.001;
+                break;
+            case GLFW_KEY_DOWN:
+                speed_x -= 0.001;
+                break;
+            case GLFW_KEY_LEFT:
+                speed_y += 0.001;
+                break;
+            case GLFW_KEY_RIGHT:
+                speed_y -= 0.001;
                 break;
             default:
                 break;
