@@ -5,44 +5,52 @@ in vec4 vpoint_mv;
 in vec3 light_dir, view_dir;
 
 uniform vec3 La, Ld, Ls;
-uniform sampler2D heightMap;
-
 uniform bool isWater;
+uniform float heightmap_width;
+uniform float heightmap_height;
+
+//Texures
+uniform sampler2D heightMap;
+uniform sampler2D GrassTex2D;
+uniform sampler2D RockTex2D;
+uniform sampler2D SeabedTex2D;
+uniform sampler2D SandTex2D;
+uniform sampler2D SnowTex2D;
 
 out vec4 color;
 
 /*************
 SAND values
 **************/
-vec3 sandKa = vec3(0.73f, 0.67, 0.43f);
+vec3 sandKa = texture(SandTex2D, texture_coordinates).rgb;
 vec3 sandKd = vec3(0.2f, 0.2f, 0.2f);
 vec3 sandKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 GRASS values
 **************/
-vec3 grassKa = vec3(0.0f, 0.40f, 0.0f);
+vec3 grassKa = texture(GrassTex2D, texture_coordinates).rgb;
 vec3 grassKd = vec3(0.15f, 0.15f, 0.15f);
 vec3 grassKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 ROCK values
 **************/
-vec3 rockKa = vec3(0.25f, 0.24f, 0.23f);
+vec3 rockKa = texture(RockTex2D, texture_coordinates).rgb;
 vec3 rockKd = vec3(0.2f, 0.2f, 0.2f);
 vec3 rockKs = vec3(0.0f, 0.0f, 0.00f);
 
 /*************
 SNOW values
 **************/
-vec3 snowKa = vec3(0.85f, 0.85f, 1.0f);
+vec3 snowKa = texture(SnowTex2D, texture_coordinates).rgb;
 vec3 snowKd = vec3(0.2f, 0.2f, 0.2f);
-vec3 snowKs = vec3(0.5f, 0.5f, 0.5f);
+vec3 snowKs = vec3(0.2f, 0.2f, 0.2f);
 
 /*************
-UNDERGROUND values
+Seabed values
 **************/
-vec3 underKa = vec3(0.42f, 0.32f, 0.11f);
+vec3 underKa = texture(SeabedTex2D, texture_coordinates).rgb;
 vec3 underKd = vec3(0.2f, 0.2f, 0.2f);
 vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
 
@@ -68,18 +76,18 @@ vec3 getWaterColor(float percentageDarkBlue) {
 }
 
 void main() {
-    vec3 x = dFdx(vpoint_mv).xyz;
-    vec3 y = dFdy(vpoint_mv).xyz;        
-    vec3 normal_mv = normalize(cross(x,y));
-    vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
-        
     float height = texture(heightMap, texture_coordinates).r;
-
+        
     vec3 ambiant;
     vec3 diffuse;
     vec3 specular;
 
     if(isWater) {
+        vec3 x = dFdx(vpoint_mv).xyz;
+        vec3 y = dFdy(vpoint_mv).xyz;
+        vec3 normal_mv = normalize(cross(x,y));
+        vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
+
         ambiant = waterKa * La;
         diffuse = waterKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
         specular = waterKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
@@ -96,6 +104,23 @@ void main() {
             color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
         }
     }  else {
+        vec2 x1_temp = vec2(texture_coordinates.x-(1.0/heightmap_width), texture_coordinates.y);
+        vec2 x2_temp = vec2(texture_coordinates.x+(1.0/heightmap_width), texture_coordinates.y);
+
+        vec3 x1 = vec3(x1_temp, texture(heightMap, x1_temp).r);
+        vec3 x2 = vec3(x2_temp, texture(heightMap, x2_temp).r);
+
+        vec2 y1_temp = vec2(texture_coordinates.x, texture_coordinates.y-(1.0/heightmap_height));
+        vec2 y2_temp = vec2(texture_coordinates.x, texture_coordinates.y+(1.0/heightmap_height));
+
+        vec3 y1 = vec3(y1_temp, texture(heightMap, y1_temp).r);
+        vec3 y2 = vec3(y2_temp, texture(heightMap, y2_temp).r);
+
+        vec3 x = normalize(x2-x1);
+        vec3 y = normalize(y2-y1);   
+        vec3 normal_mv = normalize(cross(x,y));
+        vec3 r = normalize(2*normal_mv*(max(0.0f, dot(normal_mv,light_dir))) - light_dir);
+
         if (height >= snowMin + epsilon) { // Only white snow
             ambiant = snowKa * La;
             diffuse = snowKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;

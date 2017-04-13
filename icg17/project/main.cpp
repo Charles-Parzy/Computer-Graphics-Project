@@ -51,7 +51,7 @@ void Init(GLFWwindow* window) {
     vec3 cam_up(0.0f, 0.0f, 1.0f);
     view_matrix = lookAt(cam_pos, cam_look, cam_up);
     float ratio = window_width / (float) window_height;
-    projection_matrix = perspective(45.0f, ratio, 0.1f, 5.0f);
+    projection_matrix = perspective(45.0f, ratio, 0.1f, 20.0f);
     
     view_matrix = translate(mat4(1.0f), vec3(0.0f, -0.3f, 0.0f));
     trackball_matrix = IDENTITY_MATRIX;
@@ -61,10 +61,10 @@ void Init(GLFWwindow* window) {
     // this unsures that the framebuffer has the same size as the window
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
-    heightmap_texture_id = framebuffer.Init(window_width, window_height);
+    heightmap_texture_id = framebuffer.Init(window_width, window_height, true);
     heightmap.Init();
-    terrain.Init(heightmap_texture_id, false);
-    water.Init(heightmap_texture_id, true);
+    terrain.Init(window_width, window_height, heightmap_texture_id, false);
+    water.Init(window_width, window_height, heightmap_texture_id, true);
 
     framebuffer.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

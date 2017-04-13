@@ -34,9 +34,20 @@ class Terrain : public Light {
         GLuint vertex_buffer_object_position_;  // memory buffer for positions
         GLuint vertex_buffer_object_index_;     // memory buffer for indices
         GLuint program_id_;                     // GLSL shader program ID
-        GLuint heightmap_texture_id_;           // Heightmap texture
         GLuint num_indices_;                    // number of vertices to render
+
+        //Textures
+        GLuint heightmap_texture_id_;           // Heightmap texture
+        GLuint grass_texture_id_;   
+        GLuint rock_texture_id_;   
+        GLuint snow_texture_id_;   
+        GLuint seabed_texture_id_;   
+        GLuint sand_texture_id_;   
+
+        //Water drawing
         GLboolean isWater = false;
+        float heightmap_width_;
+        float heightmap_height_;
 
         void BindShader(float time, GLuint program_id,
                         const glm::mat4 &model = IDENTITY_MATRIX,
@@ -62,8 +73,51 @@ class Terrain : public Light {
             glUniform1f(glGetUniformLocation(program_id_, "time"), time);
         }
 
+        void loadTexture(const string file, GLuint* texture_id, const char* shaderTextureName, GLuint gl_texture_id) {
+            int width;
+            int height;
+            int nb_component;
+            string filename = "../../textures/"+file;
+            // set stb_image to have the same coordinates as OpenGL
+            stbi_set_flip_vertically_on_load(1);
+            unsigned char* image = stbi_load(filename.c_str(), &width,
+                                             &height, &nb_component, 0);
+
+            if(image == nullptr) {
+                throw(string("Failed to load texture"));
+            }
+
+            glGenTextures(1, texture_id);
+            glBindTexture(GL_TEXTURE_2D, *texture_id);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+            if(nb_component == 3) {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+                             GL_RGB, GL_UNSIGNED_BYTE, image);
+            } else if(nb_component == 4) {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+                             GL_RGBA, GL_UNSIGNED_BYTE, image);
+            }
+
+            GLuint tex_id = glGetUniformLocation(program_id_, shaderTextureName);
+            glUniform1i(tex_id, GLuint(gl_texture_id - GL_TEXTURE0));
+            // cleanup
+            glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+            stbi_image_free(image);
+        }
+
+        void activateTexture(GLuint texture_id, GLuint gl_texture_id) {
+            glActiveTexture(gl_texture_id);
+            glBindTexture(GL_TEXTURE_2D, texture_id);
+        }
+
     public:
-        void Init(GLuint heightMap, GLboolean isWater) {
+        void Init(float heightmap_width, float heightmap_height, GLuint heightMap, GLboolean isWater) {
+            // set heightmap size
+            this->heightmap_width_ = heightmap_width;
+            this->heightmap_height_ = heightmap_height;
+
             // compile the shaders.
             program_id_ = icg_helper::LoadShaders("terrain_vshader.glsl",
                                                   "terrain_fshader.glsl");
@@ -83,7 +137,7 @@ class Terrain : public Light {
                 std::vector<GLuint> indices;
                 // TODO 5: make a triangle grid with dimension 100x100.
                 // always two subsequent entries in 'vertices' form a 2D vertex position.
-                int grid_dim = 800;
+                int grid_dim = 1200;
 
                 // the given code below are the vertices for a simple quad.
                 // your grid should have the same dimension as that quad, i.e.,
@@ -140,7 +194,16 @@ class Terrain : public Light {
             GLuint heightmap_id = glGetUniformLocation(program_id_, "heightMap");
             glUniform1i(heightmap_id, 0 /*GL_TEXTURE0*/);
             glBindTexture(GL_TEXTURE_2D, GL_TEXTURE0);
+
+
             
+            // Load/assign texures
+            loadTexture("grass.tga", &grass_texture_id_, "GrassTex2D", GL_TEXTURE1);
+            loadTexture("rock.tga", &rock_texture_id_, "RockTex2D", GL_TEXTURE2);
+            loadTexture("seabed.tga", &seabed_texture_id_, "SeabedTex2D", GL_TEXTURE3);
+            loadTexture("sand.tga", &sand_texture_id_, "SandTex2D", GL_TEXTURE4);
+            loadTexture("snow.tga", &snow_texture_id_, "SnowTex2D", GL_TEXTURE5);
+
             // to avoid the current object being polluted
             glBindVertexArray(0);
             glUseProgram(0);
@@ -154,6 +217,11 @@ class Terrain : public Light {
             glDeleteVertexArrays(1, &vertex_array_id_);
             glDeleteProgram(program_id_);
             glDeleteTextures(1, &heightmap_texture_id_);
+            glDeleteTextures(1, &grass_texture_id_);
+            glDeleteTextures(1, &rock_texture_id_);
+            glDeleteTextures(1, &snow_texture_id_);
+            glDeleteTextures(1, &seabed_texture_id_);
+            glDeleteTextures(1, &sand_texture_id_);
         }
 
         void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
@@ -168,9 +236,18 @@ class Terrain : public Light {
             //Setup up for shading
             BindShader(time, program_id_, model, view, projection);
 
-            // bind Texture
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
+            // window size uniforms
+            glUniform1f(glGetUniformLocation(program_id_, "heightmap_width"),
+                        this->heightmap_width_);
+            glUniform1f(glGetUniformLocation(program_id_, "heightmap_height"),
+                        this->heightmap_height_);
+
+            activateTexture(heightmap_texture_id_, GL_TEXTURE0);
+            activateTexture(grass_texture_id_, GL_TEXTURE1);
+            activateTexture(rock_texture_id_, GL_TEXTURE2);
+            activateTexture(seabed_texture_id_, GL_TEXTURE3);
+            activateTexture(sand_texture_id_, GL_TEXTURE4);
+            activateTexture(snow_texture_id_, GL_TEXTURE5);
 
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);
