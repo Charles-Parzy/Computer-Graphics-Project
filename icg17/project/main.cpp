@@ -12,11 +12,13 @@
 #include "trackball.h"
 #include "framebuffer/framebuffer.h"
 #include "heightmap/heightmap.h"
+#include "skybox/skybox.h"
 
 Terrain terrain;
 FrameBuffer framebuffer;
 HeightMap heightmap;    
 Terrain water;
+Skybox skybox;
 
 GLuint heightmap_texture_id;
 
@@ -65,6 +67,7 @@ void Init(GLFWwindow* window) {
     heightmap.Init();
     terrain.Init(window_width, window_height, heightmap_texture_id, false);
     water.Init(window_width, window_height, heightmap_texture_id, true);
+    skybox.Init();
 
     framebuffer.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -93,10 +96,10 @@ void Display() {
         speed_y = 0.01f * sign_y;
     
     if (abs(speed_x) < eps)
-    speed_x = 0;
+        speed_x = 0;
     
     if (abs(speed_y) < eps)
-    speed_y = 0;
+        speed_y = 0;
     
     view_matrix = translate(view_matrix, vec3(speed_y, 0.0f, speed_x));
     trackball_matrix = translate(trackball_matrix, vec3(speed_y, 0.0f, speed_x));
@@ -104,6 +107,7 @@ void Display() {
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     terrain.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    skybox.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     water.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
