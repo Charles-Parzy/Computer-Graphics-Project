@@ -16,6 +16,7 @@ uniform sampler2D RockTex2D;
 uniform sampler2D SeabedTex2D;
 uniform sampler2D SandTex2D;
 uniform sampler2D SnowTex2D;
+uniform sampler2D WaterTex2D;
 
 out vec4 color;
 
@@ -57,7 +58,7 @@ vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER COLOR
 **************/
-vec3 waterKa = vec3(0.0f, 0.3f, 0.9f);
+vec3 waterKa = texture(WaterTex2D, texture_coordinates).rgb;
 vec3 waterKd = vec3(0.0f, 0.31f, 0.31f);
 vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
 
@@ -95,13 +96,11 @@ void main() {
         if(height >= sandMin && height <= sandMin + 0.005) {
             float waterPerc = 0.7f - 0.7f * ((height - (sandMin)) / 0.005f);
             color = vec4(ambiant + diffuse + specular, waterPerc);
-        }else if (height < sandMin){
+        } else {
             height = max(0.0f, height);
             float percentageDarkBlue = (sandMin-height)/sandMin;
             ambiant = getWaterColor(percentageDarkBlue) * La;
-            color = vec4(ambiant + diffuse + specular, 0.7f);
-        } else {
-            color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
+            color = vec4(ambiant + diffuse + specular, 0.75f);
         }
     }  else {
         vec2 x1_temp = vec2(texture_coordinates.x-(1.0/heightmap_width), texture_coordinates.y);

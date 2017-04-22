@@ -42,7 +42,8 @@ class Terrain : public Light {
         GLuint rock_texture_id_;   
         GLuint snow_texture_id_;   
         GLuint seabed_texture_id_;   
-        GLuint sand_texture_id_;   
+        GLuint sand_texture_id_;
+        GLuint water_texture_id_;   
 
         //Water drawing
         GLboolean isWater = false;
@@ -203,6 +204,7 @@ class Terrain : public Light {
             loadTexture("seabed.tga", &seabed_texture_id_, "SeabedTex2D", GL_TEXTURE3);
             loadTexture("sand.tga", &sand_texture_id_, "SandTex2D", GL_TEXTURE4);
             loadTexture("snow.tga", &snow_texture_id_, "SnowTex2D", GL_TEXTURE5);
+            loadTexture("water.tga", &water_texture_id_, "WaterTex2D", GL_TEXTURE6);
 
             // to avoid the current object being polluted
             glBindVertexArray(0);
@@ -222,6 +224,7 @@ class Terrain : public Light {
             glDeleteTextures(1, &snow_texture_id_);
             glDeleteTextures(1, &seabed_texture_id_);
             glDeleteTextures(1, &sand_texture_id_);
+            glDeleteTextures(1, &water_texture_id_);
         }
 
         void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
@@ -248,6 +251,7 @@ class Terrain : public Light {
             activateTexture(seabed_texture_id_, GL_TEXTURE3);
             activateTexture(sand_texture_id_, GL_TEXTURE4);
             activateTexture(snow_texture_id_, GL_TEXTURE5);
+            activateTexture(water_texture_id_, GL_TEXTURE6);
 
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);
