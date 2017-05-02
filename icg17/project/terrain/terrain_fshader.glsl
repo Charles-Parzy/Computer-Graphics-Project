@@ -3,9 +3,12 @@
 in vec2 texture_coordinates;
 in vec4 vpoint_mv;
 in vec3 light_dir, view_dir;
+in vec3 wavenormal;
+in mat4 mv;
 
 uniform vec3 La, Ld, Ls;
 uniform bool isWater;
+uniform bool isReflection;
 uniform float heightmap_width;
 uniform float heightmap_height;
 
@@ -17,6 +20,7 @@ uniform sampler2D SeabedTex2D;
 uniform sampler2D SandTex2D;
 uniform sampler2D SnowTex2D;
 uniform sampler2D WaterTex2D;
+uniform sampler2D reflection;
 
 out vec4 color;
 
@@ -58,13 +62,15 @@ vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER COLOR
 **************/
-vec3 waterKa = texture(WaterTex2D, texture_coordinates).rgb;
+//vec3 waterKa = texture(WaterTex2D, texture_coordinates).rgb;
+vec3 waterKa = vec3(0.0f, 0.6f, 0.6f);
 vec3 waterKd = vec3(0.0f, 0.31f, 0.31f);
 vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 CONSTANT values
 **************/
+//const float default_alpha = 1.0f;
 const float default_alpha = 60.0f;
 const float sandMin = 0.130f;
 const float forestMin = 0.135f;
@@ -78,12 +84,20 @@ vec3 getWaterColor(float percentageDarkBlue) {
 
 void main() {
     float height = texture(heightMap, texture_coordinates).r;
-        
+    
+    /// TODO: query window_width/height using the textureSize(..) function on tex_mirror
+    float window_width = textureSize(reflection, 0).x;
+    float window_height = textureSize(reflection, 0).y;
+    /// TODO: use gl_FragCoord to build a new [_u,_v] coordinate to query the framebuffer
+    float _u = gl_FragCoord.x/window_width;
+    float _v = gl_FragCoord.y/window_height;
+
     vec3 ambiant;
     vec3 diffuse;
     vec3 specular;
 
     if(isWater) {
+        vec3 mirrornormal = vec3(0,0,1);
         vec3 x = dFdx(vpoint_mv).xyz;
         vec3 y = dFdy(vpoint_mv).xyz;
         vec3 normal_mv = normalize(cross(x,y));
@@ -91,18 +105,27 @@ void main() {
 
         ambiant = waterKa * La;
         diffuse = waterKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
-        specular = waterKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls; 
+        specular = waterKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;
+
+        //vec3 flatnormal = wavenormal - dot(wavenormal, mirrornormal) * mirrornormal;
+        //vec3 eyenormal = transpose(inverse(mat3(mv))) * flatnormal;
+        //vec2 offset = normalize(eyenormal.xy) * length(flatnormal) * 0.1; 
 
         if(height >= sandMin && height <= sandMin + 0.005) {
             float waterPerc = 0.7f - 0.7f * ((height - (sandMin)) / 0.005f);
-            color = vec4(ambiant + diffuse + specular, waterPerc);
-        } else {
+            //color = vec4(ambiant + diffuse + specular, waterPerc);
+            color = vec4(mix(ambiant + diffuse + specular, texture(reflection,vec2(_u,_v)).rgb, 0.5), waterPerc);
+        } else if (height < sandMin){
             height = max(0.0f, height);
             float percentageDarkBlue = (sandMin-height)/sandMin;
             ambiant = getWaterColor(percentageDarkBlue) * La;
-            color = vec4(ambiant + diffuse + specular, 0.75f);
+            color = vec4(mix(ambiant + diffuse + specular, texture(reflection,vec2(_u,_v)).rgb, 0.5), 0.7f);
+            //color = vec4(ambiant + diffuse + specular, 0.7f);
+        } else {
+            color = vec4(1.0f, 1.0f, 1.0f, 0.0f);
         }
-    }  else {
+        //color = vec4(mix(color.rgb, texture(reflection,vec2(_u,_v)).rgb, 1.0), 1.0);
+    } else {
         vec2 x1_temp = vec2(texture_coordinates.x-(1.0/heightmap_width), texture_coordinates.y);
         vec2 x2_temp = vec2(texture_coordinates.x+(1.0/heightmap_width), texture_coordinates.y);
 
@@ -171,6 +194,12 @@ void main() {
         }
 
         color = vec4(ambiant + diffuse + specular, 1.0f);
+    }
+
+    if(isReflection) {
+       if (height < sandMin) {
+        color = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+       } 
     }
 
 }

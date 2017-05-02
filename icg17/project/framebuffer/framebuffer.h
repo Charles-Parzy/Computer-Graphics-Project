@@ -23,7 +23,7 @@ class FrameBuffer {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
-        int Init(int image_width, int image_height, bool use_interpolation = false) {
+        int Init(int image_width, int image_height, bool use_interpolation = false, GLenum format = GL_RED, GLenum int_format = GL_R32F) {
             this->width_ = image_width;
             this->height_ = image_height;
 
@@ -42,8 +42,8 @@ class FrameBuffer {
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 }
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width_, height_, 0,
-                             GL_RED, GL_FLOAT, NULL);
+            glTexImage2D(GL_TEXTURE_2D, 0, int_format, width_, height_, 0,
+                             format, GL_FLOAT, NULL);
                 // how to load from buffer
             }
 

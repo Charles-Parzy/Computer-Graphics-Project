@@ -17,10 +17,14 @@
 
 Terrain terrain;
 FrameBuffer framebuffer;
+FrameBuffer framebuffer_mirror;
 HeightMap heightmap;    
 Terrain water;
+Terrain reflection;
 Skybox skybox;
+Skybox skybox_mirror;
 Lighthouse lighthouse;
+
 
 GLuint heightmap_texture_id;
 
@@ -50,26 +54,33 @@ void Init(GLFWwindow* window) {
     glEnable(GL_DEPTH_TEST);
     
     // setup view and projection matrices
-    vec3 cam_pos(2.0f, 2.0f, 2.0f);
+    vec3 cam_pos(-10.0f, 0.0f, 0.0f);
     vec3 cam_look(0.0f, 0.0f, 0.0f);
-    vec3 cam_up(0.0f, 0.0f, 1.0f);
+    vec3 cam_up(0.0f, 0.0f, 0.0f);
     view_matrix = lookAt(cam_pos, cam_look, cam_up);
     float ratio = window_width / (float) window_height;
-    projection_matrix = perspective(45.0f, ratio, 0.1f, 20.0f);
+    projection_matrix = perspective(45.0f, ratio, 0.5f, 100.0f);
     
-    view_matrix = translate(mat4(1.0f), vec3(0.0f, -0.3f, 0.0f));
+    view_matrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
     trackball_matrix = IDENTITY_MATRIX;
-    quad_model_matrix = translate(mat4(1.0f), vec3(0.0f, -0.25f, 0.0f));
+    quad_model_matrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
     
     // on retina/hidpi displays, pixels != screen coordinates
     // this unsures that the framebuffer has the same size as the window
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
     heightmap_texture_id = framebuffer.Init(window_width, window_height, true);
+
+    // REFLECTION CODE
+    int mirror_texture_id = framebuffer_mirror.Init(window_width, window_height, true, GL_RGB, GL_RGB32F);
+
     heightmap.Init();
-    terrain.Init(window_width, window_height, heightmap_texture_id, false);
-    water.Init(window_width, window_height, heightmap_texture_id, true);
+    terrain.Init(window_width, window_height, heightmap_texture_id, false, false, mirror_texture_id);
+    // REFLECTION CODE
+    reflection.Init(window_width, window_height, heightmap_texture_id, false, true, mirror_texture_id);
+    water.Init(window_width, window_height, heightmap_texture_id, true, false, mirror_texture_id);
     skybox.Init();
+    skybox_mirror.Init(true);
     //lighthouse.Init("tangle_cube.obj");
 
     framebuffer.Bind();
@@ -106,9 +117,17 @@ void Display() {
     
     view_matrix = translate(view_matrix, vec3(speed_y, 0.0f, speed_x));
     trackball_matrix = translate(trackball_matrix, vec3(speed_y, 0.0f, speed_x));
+    quad_model_matrix = translate(quad_model_matrix, vec3(speed_y, 0.0f, speed_x));
 
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    framebuffer_mirror.Bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        skybox_mirror.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+        reflection.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    framebuffer_mirror.Unbind();
+
     terrain.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     skybox.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     //lighthouse.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
@@ -300,6 +319,8 @@ int main(int argc, char *argv[]) {
     terrain.Cleanup();
     framebuffer.Cleanup();
     heightmap.Cleanup();
+    water.Cleanup();
+    reflection.Cleanup();
 
     // close OpenGL window and terminate GLFW
     glfwDestroyWindow(window);

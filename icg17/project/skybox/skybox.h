@@ -99,10 +99,12 @@ class Skybox {
         GLuint vertex_array_id_;        // vertex array object
         GLuint program_id_;             // GLSL shader program ID
         GLuint vertex_buffer_object_;   // memory buffer
-        GLuint texture_id_;             // texture ID
+        GLuint texture_id_;
+        GLboolean isReflection;
 
     public:
-        void Init() {
+        void Init(GLboolean isReflection = false) {
+
             // compile the shaders.
             program_id_ = icg_helper::LoadShaders("skybox_vshader.glsl",
                                                   "skybox_fshader.glsl");
@@ -146,6 +148,8 @@ class Skybox {
                 glVertexAttribPointer(vertex_texture_coord_id, 2, GL_FLOAT,
                                       DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
             }
+
+            this->isReflection = isReflection;
 
             // load texture
             {
@@ -202,8 +206,9 @@ class Skybox {
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture_id_);
 
-                        GLint model_id = glGetUniformLocation(program_id_,
-                                                  "model");
+            glUniform1i(glGetUniformLocation(program_id_, "isReflection"), this->isReflection);
+
+            GLint model_id = glGetUniformLocation(program_id_, "model");
             glUniformMatrix4fv(model_id, ONE, DONT_TRANSPOSE, glm::value_ptr(model));
 
             GLint view_id = glGetUniformLocation(program_id_, "view");

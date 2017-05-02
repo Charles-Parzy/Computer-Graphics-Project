@@ -43,10 +43,12 @@ class Terrain : public Light {
         GLuint snow_texture_id_;   
         GLuint seabed_texture_id_;   
         GLuint sand_texture_id_;
-        GLuint water_texture_id_;   
+        GLuint water_texture_id_;
+        GLuint reflection_texture_id_;
 
         //Water drawing
         GLboolean isWater = false;
+        GLboolean isReflection = false;
         float heightmap_width_;
         float heightmap_height_;
 
@@ -71,6 +73,8 @@ class Terrain : public Light {
 
             glUniform1i(glGetUniformLocation(program_id_, "isWater"),
                         this->isWater);
+            glUniform1i(glGetUniformLocation(program_id_, "isReflection"),
+                        this->isReflection);
             glUniform1f(glGetUniformLocation(program_id_, "time"), time);
         }
 
@@ -114,7 +118,7 @@ class Terrain : public Light {
         }
 
     public:
-        void Init(float heightmap_width, float heightmap_height, GLuint heightMap, GLboolean isWater) {
+        void Init(float heightmap_width, float heightmap_height, GLuint heightMap, GLboolean isWater, GLboolean isReflection, GLuint reflection) {
             // set heightmap size
             this->heightmap_width_ = heightmap_width;
             this->heightmap_height_ = heightmap_height;
@@ -188,6 +192,7 @@ class Terrain : public Light {
             }
 
             this->isWater = isWater;
+            this->isReflection = isReflection;
 
             // load/Assign heightmap texture
             this->heightmap_texture_id_ = heightMap;
@@ -196,6 +201,12 @@ class Terrain : public Light {
             glUniform1i(heightmap_id, 0 /*GL_TEXTURE0*/);
             glBindTexture(GL_TEXTURE_2D, GL_TEXTURE0);
 
+            // REFLECTION CODE
+            this->reflection_texture_id_ = reflection;
+            glBindTexture(GL_TEXTURE_2D, reflection_texture_id_);
+            GLuint reflection_id = glGetUniformLocation(program_id_, "reflection");
+            glUniform1i(reflection_id, 7 /*GL_TEXTURE7*/);
+            glBindTexture(GL_TEXTURE_2D, GL_TEXTURE7);
 
             
             // Load/assign texures
@@ -225,6 +236,7 @@ class Terrain : public Light {
             glDeleteTextures(1, &seabed_texture_id_);
             glDeleteTextures(1, &sand_texture_id_);
             glDeleteTextures(1, &water_texture_id_);
+            glDeleteTextures(1, &reflection_texture_id_);
         }
 
         void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
@@ -252,6 +264,7 @@ class Terrain : public Light {
             activateTexture(sand_texture_id_, GL_TEXTURE4);
             activateTexture(snow_texture_id_, GL_TEXTURE5);
             activateTexture(water_texture_id_, GL_TEXTURE6);
+            activateTexture(reflection_texture_id_, GL_TEXTURE7);
 
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);
