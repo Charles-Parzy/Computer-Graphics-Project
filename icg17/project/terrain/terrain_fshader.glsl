@@ -65,7 +65,7 @@ vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 CONSTANT values
 **************/
-const float default_alpha = 1.0f;
+const float default_alpha = 60.0f;
 const float sandMin = 0.130f;
 const float forestMin = 0.135f;
 const float snowMin = 0.26f;

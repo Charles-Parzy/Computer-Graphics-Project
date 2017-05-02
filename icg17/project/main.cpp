@@ -13,12 +13,14 @@
 #include "framebuffer/framebuffer.h"
 #include "heightmap/heightmap.h"
 #include "skybox/skybox.h"
+#include "lighthouse/lighthouse.h"
 
 Terrain terrain;
 FrameBuffer framebuffer;
 HeightMap heightmap;    
 Terrain water;
 Skybox skybox;
+Lighthouse lighthouse;
 
 GLuint heightmap_texture_id;
 
@@ -68,6 +70,7 @@ void Init(GLFWwindow* window) {
     terrain.Init(window_width, window_height, heightmap_texture_id, false);
     water.Init(window_width, window_height, heightmap_texture_id, true);
     skybox.Init();
+    //lighthouse.Init("tangle_cube.obj");
 
     framebuffer.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -108,6 +111,7 @@ void Display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     terrain.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     skybox.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
+    //lighthouse.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     water.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
