@@ -18,7 +18,7 @@ out vec2 texture_coordinates;
 out vec3 wavenormal;
 out mat4 mv;
 
-const float sandMin = 0.1322f; // Keep it consistant with a little bit more 
+const float sandMin = 0.1322f; // Keep it consistant with a little bit more
 
 void main() {
     // World (triangle grid) coordinates are (-1,-1) x (1,1).
@@ -65,14 +65,14 @@ void main() {
                                        vec2(1.6f,1.6f) - uv,
                                        vec2(0.0f,1.0f),
                                        vec2(0.1f,0.9f));
-            
+
             // sending height to fshader so I can debug via color
             height = sandMin;
             // the new x and y
             float temp = 0;
             float x_norm = 0;
             float y_norm = 0;
-            
+
             // iterating over all the waves and calculating the x, y and height for
             // a single point at uv
             for (int i = 0;  i < 5; i++) {

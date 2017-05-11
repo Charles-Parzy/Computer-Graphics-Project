@@ -1,4 +1,3 @@
-// glew must be before glfw
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -13,18 +12,28 @@
 #include "framebuffer/framebuffer.h"
 #include "heightmap/heightmap.h"
 #include "skybox/skybox.h"
+#include "camera/camera.h"
 #include "lighthouse/lighthouse.h"
+
+void applyCameraMovements();
+void handleFactors();
 
 Terrain terrain;
 FrameBuffer framebuffer;
 FrameBuffer framebuffer_mirror;
-HeightMap heightmap;    
+HeightMap heightmap;
 Terrain water;
 Terrain reflection;
 Skybox skybox;
 Skybox skybox_mirror;
 Lighthouse lighthouse;
 
+Trackball trackball;
+Camera camera;
+
+vec3 cam_look;
+vec3 cam_pos;
+vec3 cam_up;
 
 GLuint heightmap_texture_id;
 
@@ -39,32 +48,28 @@ mat4 quad_model_matrix;
 int window_width = 1200;
 int window_height = 1000;
 
-float speed_x = 0.0f;
-float speed_y = 0.0f;
+float rotateUpDown = 0.0f;
+float rotateLeftRight = 0.0f;
+float moveFrontBack = 0.0f;
 
 float eps = 0.0005;
-
-Trackball trackball;
-
 void Init(GLFWwindow* window) {
     // sets background color
     glClearColor(0.937, 0.937, 0.937 /*gray*/, 0.9 /*solid*/);
-    
+
     // enable depth test.
     glEnable(GL_DEPTH_TEST);
-    
+
     // setup view and projection matrices
-    vec3 cam_pos(-10.0f, 0.0f, 0.0f);
-    vec3 cam_look(0.0f, 0.0f, 0.0f);
-    vec3 cam_up(0.0f, 0.0f, 0.0f);
+    cam_pos = vec3(0.5f, 0.130f, 0.5f);
+    cam_look = vec3(0.0f, 0.0f, 0.0f);
+    cam_up = vec3(0.0f, 1.0f, 0.0f);
     view_matrix = lookAt(cam_pos, cam_look, cam_up);
     float ratio = window_width / (float) window_height;
-    projection_matrix = perspective(45.0f, ratio, 0.5f, 100.0f);
-    
-    view_matrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
+    projection_matrix = perspective(45.0f, ratio, 0.01f, 100.0f);
     trackball_matrix = IDENTITY_MATRIX;
-    quad_model_matrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
-    
+    quad_model_matrix = IDENTITY_MATRIX;
+
     // on retina/hidpi displays, pixels != screen coordinates
     // this unsures that the framebuffer has the same size as the window
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
@@ -88,36 +93,18 @@ void Init(GLFWwindow* window) {
         heightmap.Draw();
     framebuffer.Unbind();
 
+    camera.Init(window_width, window_height, heightmap_texture_id);
 }
 
 // gets called for every frame.
-void Display() {    
+void Display() {
     const float time = glfwGetTime();
-    
-    int sign_x = speed_x / abs(speed_x);
-    int sign_y = speed_y / abs(speed_y);
-    
-    if (abs(speed_x) >= eps)
-        speed_x -= (0.00001 * sign_x);
-    
-    if (abs(speed_y) >= eps)
-        speed_y -= (0.00001 * sign_y);
-    
-    if (abs(speed_x) > 0.01)
-        speed_x = 0.01f * sign_x;
-    
-    if (abs(speed_y) > 0.01)
-        speed_y = 0.01f * sign_y;
-    
-    if (abs(speed_x) < eps)
-        speed_x = 0;
-    
-    if (abs(speed_y) < eps)
-        speed_y = 0;
-    
-    view_matrix = translate(view_matrix, vec3(speed_y, 0.0f, speed_x));
-    trackball_matrix = translate(trackball_matrix, vec3(speed_y, 0.0f, speed_x));
-    quad_model_matrix = translate(quad_model_matrix, vec3(speed_y, 0.0f, speed_x));
+    handleFactors();
+    applyCameraMovements();
+
+    view_matrix = lookAt(cam_pos, cam_look, cam_up);
+    //trackball_matrix = translate(trackball_matrix, vec3(speed_y, 0.0f, speed_x));
+    //quad_model_matrix = translate(quad_model_matrix, vec3(speed_y, 0.0f, speed_x));
 
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -187,10 +174,10 @@ void MousePos(GLFWwindow* window, double x, double y) {
 void ResizeCallback(GLFWwindow* window, int width, int height) {
     window_width = width;
     window_height = height;
-    
+
     float ratio = window_width / (float) window_height;
     projection_matrix = perspective(45.0f, ratio, 0.1f, 10.0f);
-    
+
     glViewport(0, 0, window_width, window_height);
 }
 
@@ -204,17 +191,17 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     }
 
     // only act on release
-    //if(action != GLFW_RELEASE) {
-    //    return;
-    //}
+    if(action != GLFW_RELEASE) {
+        return;
+    }
         switch(key) {
-            case 'Q':
+            case 'Y':
                 heightmap.setH(+0.05);
                 break;
-            case 'W':
+            case 'X':
                 heightmap.setH(+-0.05);
                 break;
-            case 'E':
+            case 'V':
                 heightmap.setLacunarity(+0.05);
                 break;
             case 'R':
@@ -238,23 +225,57 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
             case 'P':
                 heightmap.setGain(-0.05);
                 break;
-            case GLFW_KEY_UP:
-                speed_x += 0.001;
+            case 'A':
+                rotateLeftRight -= 0.05;
                 break;
-            case GLFW_KEY_DOWN:
-                speed_x -= 0.001;
+            case 'D':
+                rotateLeftRight += 0.05;
                 break;
-            case GLFW_KEY_LEFT:
-                speed_y += 0.001;
+            case 'W':
+                moveFrontBack += 0.01;
                 break;
-            case GLFW_KEY_RIGHT:
-                speed_y -= 0.001;
+            case 'S':
+                moveFrontBack -= 0.01;
+                break;
+            case 'Q':
+                rotateUpDown -= 0.05;
+                break;
+            case 'E':
+                rotateUpDown += 0.05;
+                break;
+            case 'F':
+                camera.switchInFpsMode();
                 break;
             default:
                 break;
         }
 }
 
+void applyCameraMovements() {
+    camera.moveFrontBack(cam_look, cam_pos, moveFrontBack);
+    camera.rotateLeftRight(cam_look, cam_pos, rotateLeftRight);
+    camera.rotateUpDown(cam_look, cam_pos, rotateUpDown);
+}
+
+void handleFactors() {
+    if (abs(rotateLeftRight) > eps) {
+        rotateLeftRight *= 0.6f;
+    } else if (abs(rotateLeftRight) <= eps) {
+        rotateLeftRight = 0;
+    }
+
+    if (abs(rotateUpDown) > eps) {
+        rotateUpDown *= 0.6f;
+    } else if (abs(rotateUpDown) <= eps) {
+        rotateUpDown = 0;
+    }
+
+    if (abs(moveFrontBack) > eps) {
+        moveFrontBack *= 0.6f;
+    } else if (abs(moveFrontBack) <= eps) {
+        moveFrontBack = 0;
+    }
+}
 
 int main(int argc, char *argv[]) {
     // GLFW Initialization
@@ -321,6 +342,7 @@ int main(int argc, char *argv[]) {
     heightmap.Cleanup();
     water.Cleanup();
     reflection.Cleanup();
+    camera.Cleanup();
 
     // close OpenGL window and terminate GLFW
     glfwDestroyWindow(window);
