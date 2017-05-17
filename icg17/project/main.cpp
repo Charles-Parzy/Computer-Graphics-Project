@@ -183,65 +183,65 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
 
-    // only act on release
-    if(action != GLFW_RELEASE) {
-        return;
-    }
-        switch(key) {
-            case 'Y':
-                heightmap.setH(+0.05);
-                break;
-            case 'X':
-                heightmap.setH(+-0.05);
-                break;
-            case 'V':
-                heightmap.setLacunarity(+0.05);
-                break;
-            case 'R':
-                heightmap.setLacunarity(-0.05);
-                break;
-            case 'T':
-                heightmap.setOctaves(+1);
-                break;
-            case 'Z':
-                heightmap.setOctaves(-1);
-                break;
-            case 'U':
-                heightmap.setOffset(+0.05);
-                break;
-            case 'I':
-                heightmap.setOffset(-0.05);
-                break;
-            case 'O':
-                heightmap.setGain(+0.05);
-                break;
-            case 'P':
-                heightmap.setGain(-0.05);
-                break;
-            case 'A':
-                rotateLeftRight -= 0.05;
-                break;
-            case 'D':
-                rotateLeftRight += 0.05;
-                break;
-            case 'W':
-                moveFrontBack += 0.03;
-                break;
-            case 'S':
-                moveFrontBack -= 0.03;
-                break;
-            case 'Q':
-                rotateUpDown -= 0.05;
-                break;
-            case 'E':
-                rotateUpDown += 0.05;
-                break;
-            case 'F':
-                camera.switchInFpsMode();
-                break;
-            default:
-                break;
+    switch(key) {
+        case 'Y':
+            heightmap.setH(+0.05);
+            break;
+        case 'X':
+            heightmap.setH(+-0.05);
+            break;
+        case 'V':
+            heightmap.setLacunarity(+0.05);
+            break;
+        case 'R':
+            heightmap.setLacunarity(-0.05);
+            break;
+        case 'T':
+            heightmap.setOctaves(+1);
+            break;
+        case 'Z':
+            heightmap.setOctaves(-1);
+            break;
+        case 'U':
+            heightmap.setOffset(+0.05);
+            break;
+        case 'I':
+            heightmap.setOffset(-0.05);
+            break;
+        case 'O':
+            heightmap.setGain(+0.05);
+            break;
+        case 'P':
+            heightmap.setGain(-0.05);
+            break;
+        case 'A':
+            rotateLeftRight -= 0.07;
+            break;
+        case 'D':
+            rotateLeftRight += 0.07;
+            break;
+        case 'W':
+            moveFrontBack += 0.03;
+            break;
+        case 'S':
+            moveFrontBack -= 0.03;
+            break;
+        case 'Q':
+            rotateUpDown -= 0.07;
+            break;
+        case 'E':
+            rotateUpDown += 0.07;
+            break;
+        case 'F': {
+            if(action != GLFW_RELEASE) {
+                return;
+            }
+            camera.switchInFpsMode();
+            break;
         }
+        default:
+            break;
+    }
 }
 
 void applyCameraMovements() {

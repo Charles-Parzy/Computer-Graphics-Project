@@ -15,7 +15,6 @@ uniform float time;
 out vec4 vpoint_mv;
 out vec3 light_dir, view_dir;
 out vec2 texture_coordinates;
-out vec3 vertexPosition3DWorld;
 out vec3 wavenormal;
 out mat4 mv;
 
@@ -26,6 +25,7 @@ void main() {
     // Texture (height map) coordinates are (0,0) x (1,1).
     texture_coordinates = (position + vec2(1.0, 1.0)) * 0.5;
     float height = texture(heightMap, texture_coordinates).r;
+    vec3 vertexPosition3DWorld;
 
     if(isWater) {
         vec2 uv = (position + vec2(1.0, 1.0)) * 0.5;

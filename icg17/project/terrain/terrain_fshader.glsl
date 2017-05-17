@@ -1,6 +1,5 @@
 #version 330
 
-in vec3 vertexPosition3DWorld;
 in vec2 texture_coordinates;
 in vec4 vpoint_mv;
 in vec3 light_dir, view_dir;
