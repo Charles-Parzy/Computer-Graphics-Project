@@ -8,8 +8,8 @@ private:
     GLuint heightmap_texture_id_;
     int heightmap_width_;
     int heightmap_height_;
-    float* texture_data;
-    bool isInFpsMode = true;
+    GLfloat* texture_data;
+    bool isInFpsMode = false;
 
 public:
 
@@ -19,7 +19,7 @@ public:
         heightmap_height_ = heightmap_height;
         this->heightmap_texture_id_ = heightMap;
 
-        texture_data = new float[heightmap_width * heightmap_height];
+        texture_data = new GLfloat[heightmap_width * heightmap_height];
         glBindTexture(GL_TEXTURE_2D, heightmap_texture_id_);
         glGetTexImage(GL_TEXTURE_2D, heightmap_texture_id_, GL_RED, GL_FLOAT, texture_data);
     }
@@ -65,25 +65,46 @@ public:
 
     void moveFrontBack(vec3 &look, vec3 &pos, float speed) {
       if(isInFpsMode) {
-            float dispX = (pos.x - look.x)*speed;
-            float dispZ = (pos.z - look.z)*speed;
+        float dispX = (pos.x - look.x)*speed;
+        float dispZ = (pos.z - look.z)*speed;
 
-            int tmpX = (int)((pos.x + 1.0) * heightmap_width_);
-            int tmpZ = (int)((pos.z + 1.0) * heightmap_height_);
-            float height = texture_data[tmpX+heightmap_width_*tmpZ];
+        float tmpPosX = pos.x - dispX;
+    	float tmpPosZ = pos.z - dispZ;
 
-            int sign = (tmpX - height) / abs(tmpX - height);
-            pos.x = pos.x - dispX;
-            pos.z = pos.z - dispZ;
-            pos.y = height;
+    	if (tmpPosX < 1.0 && tmpPosX > -1.0) {
+            pos.x = tmpPosX;
+            look.x = look.x - dispX;
+        }
+        if (tmpPosZ < 1.0 && tmpPosZ > -1.0) {
+            pos.z = tmpPosZ;
+            look.z = look.z - dispZ;
+        }
+
+        int tmpX = int((1.0+pos.x) * heightmap_width_/2.0);
+        int tmpZ = int((1.0+pos.z) * heightmap_height_/2.0);
+        cout << "tmpX " << tmpX << endl;
+        cout << "tmpZ " << tmpZ << endl;
+
+        if(tmpX > 0 && tmpX < heightmap_width_ && tmpZ > 0 && tmpZ < heightmap_height_) {
+            int height = texture_data[tmpX+heightmap_width_*tmpZ];
+            pos.y = float(height+0.06); //fps person height
+            cout << "HEIGHT =" << height << endl;
+            cout << "HEIGHT 0 =" << texture_data[0] << endl;
+            cout << "HEIGHT 1 =" << texture_data[2400] << endl;
+
+        }
       } else {
-    		float dispX = (pos.x - look.x)*speed;
-    		float dispY = (pos.y - look.y)*speed;
-    		float dispZ = (pos.z - look.z)*speed;
+        float dispX = (pos.x - look.x)*speed;
+		float dispY = (pos.y - look.y)*speed;
+		float dispZ = (pos.z - look.z)*speed;
 
-    		pos.x = pos.x - dispX;
-    		pos.y = pos.y - dispY;
-    		pos.z = pos.z - dispZ;
+		pos.x = pos.x - dispX;
+		pos.y = pos.y - dispY;
+		pos.z = pos.z - dispZ;
+
+		look.x = look.x - dispX;
+		look.y = look.y - dispY;
+		look.z = look.z - dispZ;
       }
     }
 

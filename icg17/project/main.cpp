@@ -13,7 +13,6 @@
 #include "heightmap/heightmap.h"
 #include "skybox/skybox.h"
 #include "camera/camera.h"
-#include "lighthouse/lighthouse.h"
 
 void applyCameraMovements();
 void handleFactors();
@@ -26,7 +25,6 @@ Terrain water;
 Terrain reflection;
 Skybox skybox;
 Skybox skybox_mirror;
-Lighthouse lighthouse;
 
 Trackball trackball;
 Camera camera;
@@ -75,18 +73,16 @@ void Init(GLFWwindow* window) {
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
     heightmap_texture_id = framebuffer.Init(window_width, window_height, true);
+    heightmap.Init();
 
     // REFLECTION CODE
     int mirror_texture_id = framebuffer_mirror.Init(window_width, window_height, true, GL_RGB, GL_RGB32F);
-
-    heightmap.Init();
     terrain.Init(window_width, window_height, heightmap_texture_id, false, false, mirror_texture_id);
     // REFLECTION CODE
     reflection.Init(window_width, window_height, heightmap_texture_id, false, true, mirror_texture_id);
     water.Init(window_width, window_height, heightmap_texture_id, true, false, mirror_texture_id);
     skybox.Init();
     skybox_mirror.Init(true);
-    //lighthouse.Init("tangle_cube.obj");
 
     framebuffer.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -103,8 +99,6 @@ void Display() {
     applyCameraMovements();
 
     view_matrix = lookAt(cam_pos, cam_look, cam_up);
-    //trackball_matrix = translate(trackball_matrix, vec3(speed_y, 0.0f, speed_x));
-    //quad_model_matrix = translate(quad_model_matrix, vec3(speed_y, 0.0f, speed_x));
 
     glViewport(0, 0, window_width, window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -117,7 +111,6 @@ void Display() {
 
     terrain.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     skybox.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
-    //lighthouse.Draw(trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
     water.Draw(time, trackball_matrix * quad_model_matrix, view_matrix, projection_matrix);
 }
 
@@ -232,10 +225,10 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
                 rotateLeftRight += 0.05;
                 break;
             case 'W':
-                moveFrontBack += 0.01;
+                moveFrontBack += 0.03;
                 break;
             case 'S':
-                moveFrontBack -= 0.01;
+                moveFrontBack -= 0.03;
                 break;
             case 'Q':
                 rotateUpDown -= 0.05;
