@@ -55,9 +55,9 @@ vec3 snowKs = vec3(0.2f, 0.2f, 0.2f);
 /*************
 Seabed values
 **************/
-vec3 underKa = texture(SeabedTex2D, 10.0*texture_coordinates).rgb;
-vec3 underKd = vec3(0.2f, 0.2f, 0.2f);
-vec3 underKs = vec3(0.0f, 0.0f, 0.0f);
+vec3 seaBedKa = texture(SeabedTex2D, 10.0*texture_coordinates).rgb;
+vec3 seaBedKd = vec3(0.2f, 0.2f, 0.2f);
+vec3 seaBedKs = vec3(0.0f, 0.0f, 0.0f);
 
 /*************
 WATER COLOR
@@ -73,6 +73,7 @@ CONSTANT values
 //const float default_alpha = 1.0f;
 const float default_alpha = 60.0f;
 const float sandMin = 0.130f;
+const float seadBedMax = 0.120f;
 const float forestMin = 0.135f;
 const float snowMin = 0.26f;
 const float rockMin = 0.18f;
@@ -187,10 +188,18 @@ void main() {
             diffuse = sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
             specular = sandKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;
 
-        } else { // Only underwater
-            ambiant = underKa * La;
-            diffuse = underKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
-            specular = underKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;
+        } else if (height >= sandMin - epsilon) {
+            float percentageSeaBed = (sandMin - height)/epsilon;
+            float percentageSand = 1.0 - percentageSeaBed;
+
+            ambiant = (percentageSand* sandKa * La) + (percentageSeaBed* seaBedKa * La);
+            diffuse = (percentageSand* sandKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld) + (percentageSeaBed*seaBedKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld);
+            specular = (percentageSand*grassKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls) + (percentageSeaBed*seaBedKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls);
+
+        } else { // Only seabed
+            ambiant = seaBedKa * La;
+            diffuse = seaBedKd*(max(0.0f, dot(normal_mv, light_dir)))*Ld;
+            specular = seaBedKs*pow((max(0.0f, dot(r, view_dir))),default_alpha)*Ls;
         }
 
         color = vec4(ambiant + diffuse + specular, 1.0f);
