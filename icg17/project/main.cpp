@@ -16,6 +16,9 @@
 
 void applyCameraMovements();
 void handleFactors();
+void handleKeys();
+
+GLFWwindow* window;
 
 Terrain terrain;
 FrameBuffer framebuffer;
@@ -51,6 +54,10 @@ float rotateLeftRight = 0.0f;
 float moveFrontBack = 0.0f;
 
 float eps = 0.0005;
+float decelWS = 0.5;
+float decelAD = 0.8;
+float decelQE = 0.8;
+
 void Init(GLFWwindow* window) {
     // sets background color
     glClearColor(0.937, 0.937, 0.937 /*gray*/, 0.9 /*solid*/);
@@ -95,6 +102,7 @@ void Init(GLFWwindow* window) {
 // gets called for every frame.
 void Display() {
     const float time = glfwGetTime();
+    handleKeys();
     handleFactors();
     applyCameraMovements();
 
@@ -178,6 +186,38 @@ void ErrorCallback(int error, const char* description) {
     fputs(description, stderr);
 }
 
+void handleKeys(){
+    if (glfwGetKey(window, GLFW_KEY_W)) {
+        decelWS = 1.0;
+        moveFrontBack += 0.001;
+    } if (glfwGetKey(window, GLFW_KEY_S)) {
+        decelWS = 1.0;
+        moveFrontBack -= 0.001;
+    } else {
+        decelWS = 0.8;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A)) {
+        decelAD = 1.0;
+        rotateLeftRight -= 0.01;
+    } if (glfwGetKey(window, GLFW_KEY_D)) {
+        decelAD = 1.0;
+        rotateLeftRight += 0.01;
+    } else {
+        decelAD = 0.5;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Q)) {
+        decelQE = 1.0;
+        rotateUpDown -= 0.01;
+    } if (glfwGetKey(window, GLFW_KEY_E)) {
+        decelQE = 1.0;
+        rotateUpDown += 0.01;
+    } else {
+        decelQE = 0.5;
+    }
+}
+
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -214,31 +254,18 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         case 'P':
             heightmap.setGain(-0.05);
             break;
-        case 'A':
-            rotateLeftRight -= 0.07;
-            break;
-        case 'D':
-            rotateLeftRight += 0.07;
-            break;
-        case 'W':
-            moveFrontBack += 0.03;
-            break;
-        case 'S':
-            moveFrontBack -= 0.03;
-            break;
-        case 'Q':
-            rotateUpDown -= 0.07;
-            break;
-        case 'E':
-            rotateUpDown += 0.07;
-            break;
-        case 'F': {
+        case 'F':
             if(action != GLFW_RELEASE) {
                 return;
             }
             camera.switchInFpsMode();
             break;
-        }
+        case 'C': 
+            if(action != GLFW_RELEASE) {
+                return;
+            }
+            camera.switchInBezierMode();
+            break;
         default:
             break;
     }
@@ -251,22 +278,29 @@ void applyCameraMovements() {
 }
 
 void handleFactors() {
-    if (abs(rotateLeftRight) > eps) {
-        rotateLeftRight *= 0.6f;
+    if (abs(rotateLeftRight) > eps && abs(rotateLeftRight) <= 0.1) {
+        rotateLeftRight *= decelAD;
     } else if (abs(rotateLeftRight) <= eps) {
         rotateLeftRight = 0;
+    } else {
+        rotateLeftRight = 0.09 * abs(rotateLeftRight)/rotateLeftRight;
     }
+    //cout << rotateLeftRight << endl;
 
-    if (abs(rotateUpDown) > eps) {
-        rotateUpDown *= 0.6f;
+    if (abs(rotateUpDown) > eps && abs(rotateUpDown) <= 0.1) {
+        rotateUpDown *= decelQE;
     } else if (abs(rotateUpDown) <= eps) {
         rotateUpDown = 0;
+    } else {
+        rotateUpDown = 0.09 * abs(rotateUpDown)/rotateUpDown;
     }
 
-    if (abs(moveFrontBack) > eps) {
-        moveFrontBack *= 0.6f;
+    if (abs(moveFrontBack) > eps && abs(moveFrontBack) <= 0.02) {
+        moveFrontBack *= decelWS;
     } else if (abs(moveFrontBack) <= eps) {
         moveFrontBack = 0;
+    } else {
+        moveFrontBack = 0.019 * abs(moveFrontBack)/moveFrontBack;
     }
 }
 
@@ -289,7 +323,7 @@ int main(int argc, char *argv[]) {
     // attempt to open the window: fails if required version unavailable
     // note some Intel GPUs do not support OpenGL 3.2
     // note update the driver of your graphic card
-    GLFWwindow* window = glfwCreateWindow(window_width, window_height,
+    window = glfwCreateWindow(window_width, window_height,
                                           "Trackball", NULL, NULL);
     if(!window) {
         glfwTerminate();
