@@ -3,7 +3,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-static const float maxSize = 5.0f;
+static const float maxSize = 5.0f; // Easier to scale the cube
 static const unsigned int NbCubeVertices = 36;
 static const glm::vec3 CubeVertices[] =
 {

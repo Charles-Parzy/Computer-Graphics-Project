@@ -3,7 +3,6 @@
 in vec2 position;
 
 uniform sampler2D heightMap;
-
 uniform mat4 projection;
 uniform mat4 model;
 uniform mat4 view;
@@ -21,11 +20,11 @@ out mat4 mv;
 const float sandMin = 0.1322f; // Keep it consistant with a little bit more
 
 void main() {
-    // World (triangle grid) coordinates are (-1,-1) x (1,1).
-    // Texture (height map) coordinates are (0,0) x (1,1).
+    // World coordinates are from -1 to 1, we map them to texture coordinates
+    // which are from 0 to 1.
     texture_coordinates = (position + vec2(1.0, 1.0)) * 0.5;
     float height = texture(heightMap, texture_coordinates).r;
-    vec3 vertexPosition3DWorld;
+    vec3 position3D;
 
     if(isWater) {
         vec2 uv = (position + vec2(1.0, 1.0)) * 0.5;
@@ -79,34 +78,32 @@ void main() {
                 height += a[i] * 2 * pow((sin(temp) + a[i])/2, 1.5f);
                 new_x += a[i] * q[i] * d[i][0] * cos(temp);
                 new_y += a[i] * q[i] * d[i][1] * cos(temp);
-                //x_norm += w[i] * d[i][0] * a[i] * cos(temp);
-                //y_norm += w[i] * d[i][1] * a[i] * cos(temp);
             }
             wavenormal = vec3(-x_norm, -y_norm, 1);
         } else if (height > sandMin + 0.005 && height > sandMin + 0.01) {
             wavenormal = vec3(0,0,1);
-            vertexPosition3DWorld = vec3((2 * new_x - 1), height + 0.0001, (2 * new_y - 1));
+            position3D = vec3((2 * new_x - 1), height + 0.0001, (2 * new_y - 1));
         }
-        vertexPosition3DWorld = vec3((2 * new_x - 1), height, (2 * new_y - 1));
+        position3D = vec3((2 * new_x - 1), height, (2 * new_y - 1));
     } else {
         wavenormal = vec3(0,0,1);
         // 3D vertex position : X and Y from vertex array, Z from heightmap texture.
-        vertexPosition3DWorld = vec3(position.x, height, position.y);
+        position3D = vec3(position.x, height, position.y);
     }
 
     if(isReflection) {
         if (height < sandMin) {
-            vertexPosition3DWorld = vec3(position.x, sandMin + 0.0001, position.y);
+            position3D = vec3(position.x, sandMin + 0.0001, position.y);
         } else {
-            vertexPosition3DWorld = vec3(vertexPosition3DWorld.x, (sandMin*2)-vertexPosition3DWorld.y, vertexPosition3DWorld.z);
+            position3D = vec3(position3D.x, (sandMin*2)-position3D.y, position3D.z);
         }
     }
 
     mv = view * model;
-    vpoint_mv = mv * vec4(vertexPosition3DWorld, 1.0);
+    vpoint_mv = mv * vec4(position3D, 1.0);
 
     gl_Position = projection * vpoint_mv;
 
     light_dir = normalize(light_pos - vpoint_mv.xyz);
-    view_dir = normalize(vertexPosition3DWorld - vpoint_mv.xyz);
+    view_dir = normalize(position3D - vpoint_mv.xyz);
 }
