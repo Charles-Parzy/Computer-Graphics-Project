@@ -58,8 +58,8 @@ float getGradient(int idx, vec2 position) {
     return dot(gradients[correctIndex], position);
 }
 
-float mixFunction(float a, float b, float t) {
-    return a + t*(b-a);
+float mixFunction(float a, float b, float f) {
+    return a + f*(b-a);
 }
 
 float perlin_noise(vec2 position) {
@@ -109,7 +109,6 @@ float fBm(vec2 point, float H, float lacunarity, int octaves) {
 
 
 float hybridMultifractal(vec2 point, float H, float lacunarity, int octaves, float offset) {
-    //first component
     float frequency = 0.6f;
     float weight = (perlin_noise(1.5f*point) + offset) * pow(frequency, -H);
     float sgnl = 0.0f;
@@ -120,37 +119,35 @@ float hybridMultifractal(vec2 point, float H, float lacunarity, int octaves, flo
         if ( weight > 1.0f )
             weight = 1.0f;
         frequency *= lacunarity;
-        sgnl = (perlin_noise(1.75f*point)+ offset ) * pow(frequency, -H);;
+        sgnl = (perlin_noise(1.75f*point) + offset) * pow(frequency, -H);
         height += weight * sgnl;
         weight *= sgnl;
         point *= lacunarity;
     }
 
     return ((height - 1.5f)/6.0f + 0.035f);
-
 }
 
 float ridgedMultifractal(vec2 p, float H, float lacunarity, int octaves, float offset, float gain) {
-    float result, frequency, signal, weight;
+    float result, frequency, sgnl, weight;
 
     frequency = 0.9f;
 
-    signal = offset - abs(perlin_noise(p));
-    signal*= signal;
-    result = signal;
+    sgnl = offset - abs(perlin_noise(p));
+    sgnl *= sgnl;
+    result = sgnl;
     weight = 1.0;
 
     for(int i=1; i<octaves; ++i) {
-        p*= lacunarity;
-        weight = clamp(signal*gain, 0.0,1.0);
-        signal = offset - abs(perlin_noise(p));
-        signal*= signal*weight;
-        result+= signal * pow(frequency, -H);
-        frequency*= lacunarity;
+        p *= lacunarity;
+        weight = clamp(sgnl*gain, 0.0,1.0);
+        sgnl = offset - abs(perlin_noise(p));
+        sgnl *= sgnl * weight;
+        result += sgnl * pow(frequency, -H);
+        frequency *= lacunarity;
     }
 
     return result;
-
 }
 
 void main() {

@@ -112,6 +112,7 @@ public:
             float tmpPosX = pos.x + dX;
             float tmpPosZ = pos.z + dZ;
 
+            // check that the user doesn't get out of the terrain
             if (tmpPosX < 1.0 && tmpPosX > -1.0) {
                 pos.x = tmpPosX;
                 look.x = look.x + dX;
@@ -120,23 +121,24 @@ public:
                 pos.z = tmpPosZ;
                 look.z = look.z + dZ;
             }
-            //Map into heighmat coordinates
+            //Map camera position (-1, 1) into heighmap coordinates (0,0 to ....)
             int coordX = int((1.0+pos.x) * heightmap_width_/2.0);
             int coordZ = int((1.0+pos.z) * heightmap_height_/2.0);
 
+            // Simple check on heighmap boundaries
             if(coordX > 0 && coordX < heightmap_width_ && coordZ > 0 && coordZ < heightmap_height_) {
                 float height = texture_data[coordX+heightmap_width_*coordZ];
                 pos.y = height+0.05; // Extra height for fps mode
             }
 
         } else if(isInBezierMode) {
-                    t += speed;
-                    //cout << "t=" << t << endl;
-                    //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
+            t += speed;
+            //cout << "t=" << t << endl;
+            //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
 
-                    look = getBezierLocation(initCamPoints(), numberOfCamPoints, mod(t, 1.0f));
-                    //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
-                    pos = getBezierLocation(initPathPoints(), numberOfPathPoints, mod(t, 1.0f));
+            look = getBezierLocation(initCamPoints(), numberOfCamPoints, mod(t, 1.0f));
+            //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
+            pos = getBezierLocation(initPathPoints(), numberOfPathPoints, mod(t, 1.0f));
         } else {
             float dX = (look.x - pos.x)*speed;
     		float dY = (look.y - pos.y)*speed;
