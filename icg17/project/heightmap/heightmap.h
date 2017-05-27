@@ -113,7 +113,7 @@ class HeightMap {
         void setLacunarity(float increment) {
             lacunarity_ += increment;
             cout << "Changing Lacunarity" << lacunarity_ << endl;
-        }  
+        }
 
         void setOctaves(int increment) {
             octaves_ += increment;

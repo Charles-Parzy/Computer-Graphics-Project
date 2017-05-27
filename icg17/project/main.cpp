@@ -189,17 +189,25 @@ void ErrorCallback(int error, const char* description) {
 void handleKeys(){
     if (glfwGetKey(window, GLFW_KEY_W)) {
         decelWS = 1.0;
-        moveFrontBack += 0.001;
+        if (camera.isCurrentlyInBezierMode()) {
+            moveFrontBack += 0.001;
+        } else {
+            moveFrontBack += 0.01;
+        }
     } if (glfwGetKey(window, GLFW_KEY_S)) {
         decelWS = 1.0;
-        moveFrontBack -= 0.001;
+        if (camera.isCurrentlyInBezierMode()) {
+            moveFrontBack -= 0.0006;
+        } else {
+            moveFrontBack -= 0.02;
+        }
     } else {
         decelWS = 0.8;
     }
 
     if (glfwGetKey(window, GLFW_KEY_A)) {
         decelAD = 1.0;
-        rotateLeftRight -= 0.01;
+        rotateLeftRight -= 0.03;
     } if (glfwGetKey(window, GLFW_KEY_D)) {
         decelAD = 1.0;
         rotateLeftRight += 0.01;
@@ -209,7 +217,7 @@ void handleKeys(){
 
     if (glfwGetKey(window, GLFW_KEY_Q)) {
         decelQE = 1.0;
-        rotateUpDown -= 0.01;
+        rotateUpDown -= 0.03;
     } if (glfwGetKey(window, GLFW_KEY_E)) {
         decelQE = 1.0;
         rotateUpDown += 0.01;
@@ -224,6 +232,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     }
 
     switch(key) {
+        /*
         case 'Y':
             heightmap.setH(+0.05);
             break;
@@ -254,18 +263,21 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         case 'P':
             heightmap.setGain(-0.05);
             break;
-        case 'F':
+        */
+        case 'F': {
             if(action != GLFW_RELEASE) {
                 return;
             }
             camera.switchInFpsMode();
             break;
-        case 'C': 
+        }
+        case 'C': {
             if(action != GLFW_RELEASE) {
                 return;
             }
             camera.switchInBezierMode();
             break;
+        }
         default:
             break;
     }

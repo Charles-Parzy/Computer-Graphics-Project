@@ -62,7 +62,6 @@ vec3 seaBedKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 WATER COLOR
 **************/
-//vec3 waterKa = texture(WaterTex2D, 30.0*texture_coordinates).rgb;
 vec3 waterKa = vec3(0.0f, 0.6f, 0.6f);
 vec3 waterKd = vec3(0.0f, 0.31f, 0.31f);
 vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
@@ -70,7 +69,6 @@ vec3 waterKs = vec3(0.0f, 0.0f, 0.0f);
 /*************
 CONSTANT values
 **************/
-//const float default_alpha = 1.0f;
 const float default_alpha = 60.0f;
 const float sandMin = 0.130f;
 const float seadBedMax = 0.120f;
@@ -86,10 +84,8 @@ vec3 getWaterColor(float percentageDarkBlue) {
 void main() {
     float height = texture(heightMap, texture_coordinates).r;
 
-    /// TODO: query window_width/height using the textureSize(..) function on tex_mirror
     float window_width = textureSize(reflection, 0).x;
     float window_height = textureSize(reflection, 0).y;
-    /// TODO: use gl_FragCoord to build a new [_u,_v] coordinate to query the framebuffer
     float _u = gl_FragCoord.x/window_width;
     float _v = gl_FragCoord.y/window_height;
 

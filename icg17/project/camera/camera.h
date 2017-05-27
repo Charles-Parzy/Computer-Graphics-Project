@@ -31,6 +31,10 @@ public:
         delete[] texture_data;
     }
 
+    bool isCurrentlyInBezierMode() {
+        return isInBezierMode;
+    }
+
     vec3* initPathPoints() {
         vec3* bezierPoints = new vec3[numberOfPathPoints];
         bezierPoints[0] = vec3(-0.8,0.4,0.0);
@@ -68,92 +72,97 @@ public:
         }
     }
 
+    // Multiply 2 coordinates of look vector by a rotation matrix
+    // cos t, -sin t
+    // sin t, cos t
     void rotate(float& look1, float& look2, float angle) {
     	look1 = look1*cos(angle) - look2*sin(angle);
     	look2 = look1*sin(angle) + look2*cos(angle);
     }
 
     void rotateLeftRight(vec3 &look, vec3 pos, float angle) {
-    		float tmpX = look.x - pos.x;
-    		float tmpY = look.y - pos.y;
-    		float tmpZ = look.z - pos.z;
+    		float dX = look.x - pos.x;
+    		float dZ = look.z - pos.z;
 
-    		rotate(tmpX,tmpZ,angle);
+    		rotate(dX,dZ,angle);
 
-    		look.x = tmpX + pos.x;
-    		look.y = tmpY + pos.y;
-    		look.z = tmpZ + pos.z;
+            // Add pos to get the new coordinates of look
+    		look.x = dX + pos.x;
+    		look.z = dZ + pos.z;
     }
 
     void rotateUpDown(vec3 &look, vec3 pos, float angle) {
-            float tmpX = look.x - pos.x;
-    		float tmpY = look.y - pos.y;
-    		float tmpZ = look.z - pos.z;
+            float dX = look.x - pos.x;
+    		float dY = look.y - pos.y;
 
-            tmpY = abs(tmpX)*sin(angle) + tmpY*cos(angle);
+            // Absolute value of x to be independ of the look position. Otherwise commdands are inverted
+            dY = abs(dX)*sin(angle) + dY*cos(angle);
 
-            look.x = tmpX + pos.x;
-    		look.y = tmpY + pos.y;
-    		look.z = tmpZ + pos.z;
+            // Add pos to get the new coordinates of look
+            look.x = dX + pos.x;
+    		look.y = dY + pos.y;
     }
 
     void moveFrontBack(vec3 &look, vec3 &pos, float speed) {
 
         if(isInFpsMode) {
-            float dispX = (pos.x - look.x)*speed;
-            float dispZ = (pos.z - look.z)*speed;
+            float dX = (look.x - pos.x)*speed;
+            float dZ = (look.z - pos.z)*speed;
 
-            float tmpPosX = pos.x - dispX;
-            float tmpPosZ = pos.z - dispZ;
+            float tmpPosX = pos.x + dX;
+            float tmpPosZ = pos.z + dZ;
 
+            // check that the user doesn't get out of the terrain
             if (tmpPosX < 1.0 && tmpPosX > -1.0) {
                 pos.x = tmpPosX;
-                look.x = look.x - dispX;
+                look.x = look.x + dX;
             }
             if (tmpPosZ < 1.0 && tmpPosZ > -1.0) {
                 pos.z = tmpPosZ;
-                look.z = look.z - dispZ;
+                look.z = look.z + dZ;
             }
-            //Map into heighmat coordinates
-            int tmpX = int((1.0+pos.x) * heightmap_width_/2.0);
-            int tmpZ = int((1.0+pos.z) * heightmap_height_/2.0);
+            //Map camera position (-1, 1) into heighmap coordinates (0,0 to ....)
+            int coordX = int((1.0+pos.x) * heightmap_width_/2.0);
+            int coordZ = int((1.0+pos.z) * heightmap_height_/2.0);
 
-            if(tmpX > 0 && tmpX < heightmap_width_ && tmpZ > 0 && tmpZ < heightmap_height_) {
-                float height = texture_data[tmpX+heightmap_width_*tmpZ];
-                pos.y = height+0.05;
+            // Simple check on heighmap boundaries
+            if(coordX > 0 && coordX < heightmap_width_ && coordZ > 0 && coordZ < heightmap_height_) {
+                float height = texture_data[coordX+heightmap_width_*coordZ];
+                pos.y = height+0.05; // Extra height for fps mode
             }
 
         } else if(isInBezierMode) {
-                    t += speed;
-                    //cout << "t=" << t << endl;
-                    //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
+            t += speed;
+            //cout << "t=" << t << endl;
+            //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
 
-                    look = getBezierLocation(initCamPoints(), numberOfCamPoints, mod(t, 1.0f));
-                    //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
-                    pos = getBezierLocation(initPathPoints(), numberOfPathPoints, mod(t, 1.0f));
+            look = getBezierLocation(initCamPoints(), numberOfCamPoints, mod(t, 1.0f));
+            //cout << "before " << look.x << " " << look.y << " " << look.z << endl;
+            pos = getBezierLocation(initPathPoints(), numberOfPathPoints, mod(t, 1.0f));
         } else {
-            float dispX = (pos.x - look.x)*speed;
-    		float dispY = (pos.y - look.y)*speed;
-    		float dispZ = (pos.z - look.z)*speed;
+            float dX = (look.x - pos.x)*speed;
+    		float dY = (look.y - pos.y)*speed;
+    		float dZ = (look.z - pos.z)*speed;
 
-    		pos.x = pos.x - dispX;
-    		pos.y = pos.y - dispY;
-    		pos.z = pos.z - dispZ;
+    		pos.x = pos.x + dX;
+    		pos.y = pos.y + dY;
+    		pos.z = pos.z + dZ;
 
-    		look.x = look.x - dispX;
-    		look.y = look.y - dispY;
-    		look.z = look.z - dispZ;
+    		look.x = look.x + dX;
+    		look.y = look.y + dY;
+    		look.z = look.z + dZ;
         }
     }
 
     void switchInFpsMode() {
+        isInBezierMode = false;
         isInFpsMode = !isInFpsMode;
         cout << "FPS MODE " << isInFpsMode << endl;
     }
 
     void switchInBezierMode() {
-        cout << "Bezier MODE " << isInFpsMode << endl;
         isInFpsMode = false;
         isInBezierMode = !isInBezierMode;
+        cout << "Bezier MODE " << isInBezierMode << endl;
     }
 };
