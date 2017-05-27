@@ -13,6 +13,8 @@
 #include "heightmap/heightmap.h"
 #include "skybox/skybox.h"
 #include "camera/camera.h"
+#include "waveheightmap/waveheightmap.h"
+#include "wavenormalmap/wavenormalmap.h"
 
 void applyCameraMovements();
 void handleFactors();
@@ -21,22 +23,24 @@ void handleKeys();
 GLFWwindow* window;
 
 Terrain terrain;
-FrameBuffer framebuffer;
+FrameBuffer framebuffer_height;
 FrameBuffer framebuffer_mirror;
+FrameBuffer framebuffer_waveheight;
+FrameBuffer framebuffer_wavenormal;
+
 HeightMap heightmap;
 Terrain water;
 Terrain reflection;
 Skybox skybox;
 Skybox skybox_mirror;
-
+WaveheightMap waveheightmap;
+WavenormalMap wavenormalmap;
 Trackball trackball;
 Camera camera;
 
 vec3 cam_look;
 vec3 cam_pos;
 vec3 cam_up;
-
-GLuint heightmap_texture_id;
 
 using namespace glm;
 
@@ -79,24 +83,60 @@ void Init(GLFWwindow* window) {
     // this unsures that the framebuffer has the same size as the window
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
-    heightmap_texture_id = framebuffer.Init(window_width, window_height, true);
+    int framebuffer_height_id = framebuffer_height.Init(window_width, window_height, true);
+    int framebuffer_waveheight_id = framebuffer_waveheight.Init(10000, 10000, true, GL_RGB, GL_RGB12);
+    int framebuffer_wavenormal_id = framebuffer_wavenormal.Init(10000, 10000, true, GL_RGB, GL_RGB12);
+    int framebuffer_mirror_id = framebuffer_mirror.Init(window_width, window_height, true, GL_RGB, GL_RGB32F);
+
+    int fps = 60;
+
     heightmap.Init();
 
-    // REFLECTION CODE
-    int mirror_texture_id = framebuffer_mirror.Init(window_width, window_height, true, GL_RGB, GL_RGB32F);
-    terrain.Init(window_width, window_height, heightmap_texture_id, false, false, mirror_texture_id);
-    // REFLECTION CODE
-    reflection.Init(window_width, window_height, heightmap_texture_id, false, true, mirror_texture_id);
-    water.Init(window_width, window_height, heightmap_texture_id, true, false, mirror_texture_id);
-    skybox.Init();
-    skybox_mirror.Init(true);
-
-    framebuffer.Bind();
+    // Generate a height map
+    framebuffer_height.Bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         heightmap.Draw();
-    framebuffer.Unbind();
+    framebuffer_height.Unbind();
 
-    camera.Init(window_width, window_height, heightmap_texture_id);
+    waveheightmap.Init(framebuffer_height_id, fps);
+    wavenormalmap.Init(framebuffer_height_id, fps);
+
+    // Generate the wave height map
+    framebuffer_waveheight.Bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        waveheightmap.Draw();
+    framebuffer_waveheight.Unbind();
+
+    // Generate the wave normal map
+    framebuffer_wavenormal.Bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        wavenormalmap.Draw();
+    framebuffer_waveheight.Unbind();
+
+    terrain.Init(window_width, window_height, framebuffer_height_id, 
+                                              framebuffer_mirror_id,
+                                              framebuffer_waveheight_id,
+                                              framebuffer_wavenormal_id,
+                                              false, 
+                                              false, 
+                                              fps);
+    reflection.Init(window_width, window_height, framebuffer_height_id, 
+                                              framebuffer_mirror_id,
+                                              framebuffer_waveheight_id,
+                                              framebuffer_wavenormal_id,
+                                              false, 
+                                              true, 
+                                              fps);
+    water.Init(window_width, window_height, framebuffer_height_id, 
+                                              framebuffer_mirror_id,
+                                              framebuffer_waveheight_id,
+                                              framebuffer_wavenormal_id,
+                                              true, 
+                                              false, 
+                                              fps);
+    skybox.Init();
+    skybox_mirror.Init(true);
+    camera.Init(window_width, window_height, framebuffer_height_id);
 }
 
 // gets called for every frame.
@@ -295,7 +335,7 @@ void handleFactors() {
     } else if (abs(rotateLeftRight) <= eps) {
         rotateLeftRight = 0;
     } else {
-        cout << abs(rotateLeftRight)/rotateLeftRight << endl;
+        //cout << abs(rotateLeftRight)/rotateLeftRight << endl;
         rotateLeftRight = 0.09 * abs(rotateLeftRight)/rotateLeftRight;
     }
     //cout << rotateLeftRight << endl;
@@ -378,11 +418,16 @@ int main(int argc, char *argv[]) {
     }
 
     terrain.Cleanup();
-    framebuffer.Cleanup();
+    framebuffer_height.Cleanup();
+    framebuffer_mirror.Cleanup();
+    framebuffer_waveheight.Cleanup();
+    framebuffer_wavenormal.Cleanup();
     heightmap.Cleanup();
     water.Cleanup();
     reflection.Cleanup();
     camera.Cleanup();
+    wavenormalmap.Cleanup();
+    waveheightmap.Cleanup();
 
     // close OpenGL window and terminate GLFW
     glfwDestroyWindow(window);

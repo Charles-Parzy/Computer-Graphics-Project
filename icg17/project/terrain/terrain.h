@@ -45,12 +45,17 @@ class Terrain : public Light {
         GLuint sand_texture_id_;
         GLuint water_texture_id_;
         GLuint reflection_texture_id_;
+        GLuint wave_heightmap_id_;
+        GLuint wave_normalmap_id_;
 
         //Water drawing
         GLboolean isWater = false;
         GLboolean isReflection = false;
         float heightmap_width_;
         float heightmap_height_;
+        int fps;
+        float quantum_time;
+        int height_mat_size;
 
         void BindShader(float time, GLuint program_id,
                         const glm::mat4 &model = IDENTITY_MATRIX,
@@ -75,7 +80,17 @@ class Terrain : public Light {
                         this->isWater);
             glUniform1i(glGetUniformLocation(program_id_, "isReflection"),
                         this->isReflection);
+            
+            int frame = int(ceil(fmod(time, 1.0f) / quantum_time)) - 1;
+            int row = frame / height_mat_size;
+            int col = int(fmod(frame, height_mat_size));
+
+            // pass the current time stamp to the shader.
             glUniform1f(glGetUniformLocation(program_id_, "time"), time);
+            glUniform1i(glGetUniformLocation(program_id_, "row"), row);
+            glUniform1i(glGetUniformLocation(program_id_, "col"), col);
+
+            glUniform1i(glGetUniformLocation(program_id_, "height_mat_size"), height_mat_size);
         }
 
         void loadTexture(const string file, GLuint* texture_id, const char* shaderTextureName, GLuint gl_texture_id) {
@@ -118,7 +133,13 @@ class Terrain : public Light {
         }
 
     public:
-        void Init(float heightmap_width, float heightmap_height, GLuint heightMap, GLboolean isWater, GLboolean isReflection, GLuint reflection) {
+        void Init(float heightmap_width, float heightmap_height, GLuint heightMap, 
+                                                                 GLuint reflection, 
+                                                                 GLuint waveheight, 
+                                                                 GLuint wavenormal, 
+                                                                 GLboolean isWater, 
+                                                                 GLboolean isReflection,
+                                                                 GLuint fps) {
             // set heightmap size
             this->heightmap_width_ = heightmap_width;
             this->heightmap_height_ = heightmap_height;
@@ -193,6 +214,9 @@ class Terrain : public Light {
 
             this->isWater = isWater;
             this->isReflection = isReflection;
+            this->wave_heightmap_id_ = waveheight;
+            this->wave_normalmap_id_ = wavenormal;
+            this->fps = fps;
 
             // load/Assign heightmap texture
             this->heightmap_texture_id_ = heightMap;
@@ -200,13 +224,6 @@ class Terrain : public Light {
             GLuint heightmap_id = glGetUniformLocation(program_id_, "heightMap");
             glUniform1i(heightmap_id, 0 /*GL_TEXTURE0*/);
             glBindTexture(GL_TEXTURE_2D, GL_TEXTURE0);
-
-            // REFLECTION CODE
-            this->reflection_texture_id_ = reflection;
-            glBindTexture(GL_TEXTURE_2D, reflection_texture_id_);
-            GLuint reflection_id = glGetUniformLocation(program_id_, "reflection");
-            glUniform1i(reflection_id, 7 /*GL_TEXTURE7*/);
-            glBindTexture(GL_TEXTURE_2D, GL_TEXTURE7);
 
             
             // Load/assign texures
@@ -216,6 +233,26 @@ class Terrain : public Light {
             loadTexture("sand.tga", &sand_texture_id_, "SandTex2D", GL_TEXTURE4);
             loadTexture("snow.tga", &snow_texture_id_, "SnowTex2D", GL_TEXTURE5);
             loadTexture("water.tga", &water_texture_id_, "WaterTex2D", GL_TEXTURE6);
+
+            // REFLECTION CODE
+            this->reflection_texture_id_ = reflection;
+            glBindTexture(GL_TEXTURE_2D, reflection_texture_id_);
+            GLuint reflection_id = glGetUniformLocation(program_id_, "reflection");
+            glUniform1i(reflection_id, 7 /*GL_TEXTURE7*/);
+            glBindTexture(GL_TEXTURE_2D, GL_TEXTURE7);
+
+            glBindTexture(GL_TEXTURE_2D, waveheight);
+            GLuint waveheight_id = glGetUniformLocation(program_id_, "waveheight");
+            glUniform1i(waveheight_id, 8 /*GL_TEXTURE8*/);
+            glBindTexture(GL_TEXTURE_2D, GL_TEXTURE8);
+
+            glBindTexture(GL_TEXTURE_2D, wavenormal);
+            GLuint wavenormal_id = glGetUniformLocation(program_id_, "wavenormal");
+            glUniform1i(wavenormal_id, 9 /*GL_TEXTURE9*/);
+            glBindTexture(GL_TEXTURE_2D, GL_TEXTURE9);
+
+            quantum_time = 2.0f/float(fps);
+            height_mat_size = int(ceil(sqrt(float(fps))));
 
             // to avoid the current object being polluted
             glBindVertexArray(0);
@@ -237,6 +274,8 @@ class Terrain : public Light {
             glDeleteTextures(1, &sand_texture_id_);
             glDeleteTextures(1, &water_texture_id_);
             glDeleteTextures(1, &reflection_texture_id_);
+            glDeleteTextures(1, &wave_heightmap_id_);
+            glDeleteTextures(1, &wave_normalmap_id_);
         }
 
         void Draw(float time, const glm::mat4 &model = IDENTITY_MATRIX,
@@ -265,6 +304,8 @@ class Terrain : public Light {
             activateTexture(snow_texture_id_, GL_TEXTURE5);
             activateTexture(water_texture_id_, GL_TEXTURE6);
             activateTexture(reflection_texture_id_, GL_TEXTURE7);
+            activateTexture(wave_heightmap_id_, GL_TEXTURE8);
+            activateTexture(wave_normalmap_id_, GL_TEXTURE9);
 
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, num_indices_, GL_UNSIGNED_INT, 0);

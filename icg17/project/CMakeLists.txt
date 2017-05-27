@@ -11,7 +11,9 @@ file(GLOB SHADERS
   heightmap/heightmap_vshader.glsl
   heightmap/heightmap_fshader.glsl
   skybox/skybox_vshader.glsl
-  skybox/skybox_fshader.glsl)
+  skybox/skybox_fshader.glsl
+  waveheightmap/*.glsl
+  wavenormalmap/*.glsl)
 deploy_shaders_to_build_dir(${SHADERS})
 
 add_executable(${EXERCISENAME} ${SOURCES} ${HEADERS} ${SHADERS})
