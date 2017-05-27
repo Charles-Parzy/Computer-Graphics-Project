@@ -283,6 +283,7 @@ void handleFactors() {
     } else if (abs(rotateLeftRight) <= eps) {
         rotateLeftRight = 0;
     } else {
+        cout << abs(rotateLeftRight)/rotateLeftRight << endl;
         rotateLeftRight = 0.09 * abs(rotateLeftRight)/rotateLeftRight;
     }
     //cout << rotateLeftRight << endl;

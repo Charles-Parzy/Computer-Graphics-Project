@@ -44,12 +44,12 @@ public:
 
     vec3* initCamPoints() {
         vec3* bezierPoints = new vec3[numberOfCamPoints];
-        bezierPoints[0] = vec3(-1.0,0.25,0.0);
-        bezierPoints[1] = vec3(-1.0,0.25,-1.0);
-        bezierPoints[2] = vec3(1.0,0.25,-1.0);
-        bezierPoints[3] = vec3(1.0,0.25,1.0);
-        bezierPoints[4] = vec3(-1.0,0.25,1.0);
-        bezierPoints[5] = vec3(-1.0,0.25,0.0);
+        bezierPoints[0] = vec3(-1.0,0.35,0.0);
+        bezierPoints[1] = vec3(-1.0,0.35,-1.0);
+        bezierPoints[2] = vec3(1.0,0.35,-1.0);
+        bezierPoints[3] = vec3(1.0,0.35,1.0);
+        bezierPoints[4] = vec3(-1.0,0.35,1.0);
+        bezierPoints[5] = vec3(-1.0,0.35,0.0);
         return bezierPoints;
     }
 
