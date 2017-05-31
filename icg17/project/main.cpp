@@ -53,6 +53,8 @@ mat4 quad_model_matrix;
 int window_width = 1200;
 int window_height = 1000;
 
+int water_texture_size = 5000;
+
 float rotateUpDown = 0.0f;
 float rotateLeftRight = 0.0f;
 float moveFrontBack = 0.0f;
@@ -84,8 +86,8 @@ void Init(GLFWwindow* window) {
     // (see http://www.glfw.org/docs/latest/window.html#window_fbsize)
     glfwGetFramebufferSize(window, &window_width, &window_height);
     int framebuffer_height_id = framebuffer_height.Init(window_width, window_height, true);
-    int framebuffer_waveheight_id = framebuffer_waveheight.Init(10000, 10000, true, GL_RGB, GL_RGB12);
-    int framebuffer_wavenormal_id = framebuffer_wavenormal.Init(10000, 10000, true, GL_RGB, GL_RGB12);
+    int framebuffer_waveheight_id = framebuffer_waveheight.Init(water_texture_size, water_texture_size, true, GL_RGB, GL_RGB12);
+    int framebuffer_wavenormal_id = framebuffer_wavenormal.Init(water_texture_size, water_texture_size, true, GL_RGB, GL_RGB12);
     int framebuffer_mirror_id = framebuffer_mirror.Init(window_width, window_height, true, GL_RGB, GL_RGB32F);
 
     int fps = 60;
@@ -127,7 +129,7 @@ void Init(GLFWwindow* window) {
                                               false, 
                                               true, 
                                               fps);
-    water.Init(window_width, window_height, framebuffer_height_id, 
+    water.Init(window_width, window_height, framebuffer_height_id,
                                               framebuffer_mirror_id,
                                               framebuffer_waveheight_id,
                                               framebuffer_wavenormal_id,
